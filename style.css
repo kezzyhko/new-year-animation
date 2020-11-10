@@ -2,6 +2,7 @@ body {
 	background-color: lightcyan;
 	font-size: 1.2rem;
 	text-align: center;
+	user-select: none;
 }
 #tree, #snow {
 	position: absolute;
@@ -14,6 +15,8 @@ body {
 	color: orchid;
 	font-size: 3em;
 	word-spacing: 50px;
+	z-index: 100;
+	/*user-select: text;*/
 }
 #tree {
 	font-weight: bold;
@@ -21,4 +24,13 @@ body {
 #snow {
 	color: blue;
 	overflow: hidden;
+	z-index: -100;
+}
+#audio {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	color: red;
+    outline: none;
 }
