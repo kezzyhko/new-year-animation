@@ -1,6 +1,6 @@
 // constants
 
-var wind = -1, snowhillHeight = 3, fallingRate = 6, meltingRate = 2.7, speed = 6;
+var wind = -1, snowhillHeight = 3, fallingRate = 1/30, meltingRate = 15/1000, speed = 6;
 var ballSymbols = ['/', '\\', '_', '"', '<', '>', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 var ballColors = ['purple', 'brown', 'orange', 'tomato', 'orchid', 'navy', 'fuchsia'];
 var treeSymbolsColors = {'M': 'green', '|': 'saddlebrown'};
@@ -94,18 +94,18 @@ window.onresize = function() {
 	// start animation
 	function moveSnow() {
 		for (var i = height - 1; i >= 0; i--) {
-			if (Math.random() < fallingRate/height) {
+			if (Math.random() < fallingRate) {
 				snow[i][0] = '*';
 			}
-			if (Math.random() < fallingRate/height) {
+			if (Math.random() < fallingRate) {
 				snow[i][width-1] = '*';
 			}
 		}
 		for (var j = width - 1; j >= 0; j--) {
-			if (Math.random() < fallingRate/width) {
+			if (Math.random() < fallingRate) {
 				snow[0][j] = '*';
 			}
-			if (Math.random() < meltingRate/width) {
+			if (Math.random() < meltingRate) {
 				snow[height-1][j] = ' ';
 			}
 		}
