@@ -21,9 +21,13 @@ var treeSymbols = Object.getOwnPropertyNames(treeSymbolsColors);
 
 
 window.onload = function() {
-	// make everything colorful
 	var picture = document.getElementById('picture').innerText;
 	var treeBlock = document.getElementById('tree');
+
+	// change dots to current year
+	picture = picture.replace('....', new Date().getFullYear() + 1);
+
+	// make everything colorful
 	treeBlock.innerHTML = '';
 	for (var i = 0; i <= picture.length - 1; i++) {
 		if (ballSymbols.indexOf(picture[i]) >= 0) {
