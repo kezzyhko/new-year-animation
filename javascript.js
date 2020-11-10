@@ -21,6 +21,8 @@ var treeSymbols = Object.getOwnPropertyNames(treeSymbolsColors);
 
 
 window.onload = function() {
+
+	// helper variables
 	var picture = document.getElementById('picture').innerText;
 	var treeBlock = document.getElementById('tree');
 
@@ -71,11 +73,13 @@ window.onload = function() {
 		H.style.color = randomElement(textColors);
 	}
 	blinkText(0);
+
 }
 
 
 
 window.onresize = function() {
+
 	// calculate size
 	width = Math.floor(window.innerWidth/8.5);
 	height = Math.floor(window.innerHeight/18);
@@ -125,4 +129,5 @@ window.onresize = function() {
 	}
 	clearInterval(moveSnowInterval);
 	moveSnowInterval = setInterval(moveSnow, 1000/speed);
+
 }
