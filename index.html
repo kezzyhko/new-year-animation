@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>— ÕŒ¬€Ã √ŒƒŒÃ!</title>
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+		<link rel="shortcut icon" href="favicon.png" type="image/png">
+		<script>
+			function randomElement(arr) {
+				return arr[Math.floor(Math.random()*arr.length)];
+			}
+			
+			var wind = -1, snowhillHeight = 3, fallingRate = 6, meltingRate = 2, speed = 6
+			var ballSymbols = ['/', '\\', '_', '"', '2', '0', '1', '9', '<', '>'];
+			var ballColors = ['purple', 'brown', 'orange', 'tomato', 'orchid', 'navy', 'fuchsia'];
+			var treeSymbolsColors = {'M': 'green', '|': 'saddlebrown'};
+			
+			var moveSnowInterval = null;
+			var textColors = [];
+			Object.assign(textColors, ballColors);
+			var treeSymbols = Object.getOwnPropertyNames(treeSymbolsColors);
+			window.onload = function() {
+				var picture = document.getElementById('picture').innerText;
+				var treeBlock = document.getElementById('tree');
+				treeBlock.innerHTML = '';
+				for (var i = 0; i <= picture.length - 1; i++) {
+					if (ballSymbols.indexOf(picture[i]) >= 0) {
+						symbol = picture[i];
+						
+						if (i >= picture.indexOf(treeSymbols[0])) {
+							if (picture[i-1] == treeSymbols[0] && picture[i] == ballSymbols[0]) {
+								previousColor = randomElement(ballColors);
+								ballColors.splice(ballColors.indexOf(previousColor), 1);
+							}
+							color = previousColor;
+						}
+						else color = 'red';
+					}
+					else if (treeSymbols.indexOf(picture[i]) >= 0) {
+						symbol = picture[i];
+						color = treeSymbolsColors[symbol];
+					}
+					else {
+						symbol = (picture[i] == '\n') ? '\n' : ' ';
+						color = null;
+					}
+					
+					if (color != null) {
+						treeBlock.innerHTML += '<span style="color: ' + color + '">' + picture[i] + '</span>';
+					}
+					else {
+						treeBlock.innerHTML += symbol;
+					}
+				}
+				window.onresize();
+				
+				var H = document.getElementById('H');
+				function blinkText(delay) {
+					if (delay < 300) delay = 1000;
+					setTimeout(blinkText, delay, delay/1.1);
+					H.style.color = randomElement(textColors);
+				}
+				blinkText(0);
+			}
+			window.onresize = function() {
+				width = Math.floor(window.innerWidth/7);
+				
+				clearInterval(moveSnowInterval);
+				var picture = document.getElementById('picture').innerText;
+				pad = ' '.repeat(Math.floor((width - picture.split('\n')[0].length)/2));
+				picture = pad + picture.split('\n').join(pad+'\n'+pad) + pad;
+				picture = picture.split('\n');
+				picture.unshift(...Array(Math.max(0, Math.floor(window.innerHeight/18) - picture.length)).fill(0).map(function(item) {return picture[0];}));
+				picture = picture.join('\n');
+				
+				var snowBlock = document.getElementById('snow');
+				snowBlock.innerHTML = '';
+				var snow = Array(picture.split('\n').length).fill(null);
+				snow = snow.map(function(){return Array(width).fill(' ');});
+				height = snow.length
+				
+				function moveSnow() {
+					for (var i = height - 1; i >= 0; i--) {
+						if (Math.random() < fallingRate/height) {
+							snow[i][0] = '*';
+						}
+						if (Math.random() < fallingRate/height) {
+							snow[i][width-1] = '*';
+						}
+					}
+					for (var j = width - 1; j >= 0; j--) {
+						if (Math.random() < fallingRate/width) {
+							snow[0][j] = '*';
+						}
+						if (Math.random() < meltingRate/width) {
+							snow[height-1][j] = ' ';
+						}
+					}
+					for (var i = height - 1; i >= 1; i--) {
+						for (var j = width - 1; j >= 0; j--) {
+							var rand = randomElement([-1, 0, 1]) + wind;
+							if (snow[i-1][j] == '*'/* && (ballSymbols+treeSymbols).indexOf(picture[(width+1)*i + j+rand) < 0*/) {
+								snow[i][j+rand] = '*';
+							}
+							if (i <= height-snowhillHeight || snow[i][j-1]+snow[i][j]+snow[i][j+1] != '***') {
+								snow[i-1][j] = ' ';
+							}
+						}
+					}
+
+					snowBlock.innerText = snow.map(function(line){return line.slice(0, width).join('');}).join('\n');
+				}
+				for (var i = 0; i <= 2*height; i++) {
+					moveSnow();
+				}
+				moveSnowInterval = setInterval(moveSnow, 1000/speed);
+			}
+		</script>
+		<style>
+			body {
+				background-color: lightcyan;
+				font-size: 1.2rem;
+				text-align: center;
+			}
+			#tree, #snow {
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				margin: 0;
+			}
+			#H {
+				color: orchid;
+				font-size: 3em;
+				margin-left: -100px;
+				word-spacing: 50px;
+			}
+			#picture {
+				display: none;
+			}
+			#tree {
+				font-weight: bold;
+			}
+			#snow {
+				color: blue;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<H1 id="H">— ÕŒ¬€Ã √ŒƒŒÃ!</H1>
+		<audio autoplay loop id="audio">
+			<source src="music.ogg" type="audio/ogg">
+			<source src="music.mp3" type="audio/mpeg">
+		</audio>
+		<pre id="tree"></pre>
+		<pre id="snow"></pre>
+		<pre id="picture">
+                          
+            /\            
+          &lt;2019>          
+           \/\/           
+           MMMM           
+          MMMMMM          
+         MM/""\MM         
+        MMM\__/MMM        
+          MMMMMM          
+         MMMM/""\         
+        MMMMM\__/M        
+       M/""\MMMMMMM       
+      MM\__/MMMMMMMM      
+     MMMMMMMMMMMMMMMM     
+    MMMMMMMMM/""\MMMMM    
+        MMMMM\__/M        
+       MMMMMMMMMMMM       
+      MM/""\MMMMMMMM      
+     MMM\__/MMMMMMMMM     
+    MMMMMMMMMMMM/""\MM    
+   MMMMMMMMMMMMM\__/MMM   
+  MM/""\MMMMMMMMMMMMMMMM  
+ MMM\__/MMMMMMMMMMMMMMMMM 
+MMMMMMMMMMMMMMMMMMMMMMMMMM
+          ||||||          
+          ||||||          
+          ||||||          </pre>
+	</body>
+</html>
