@@ -8,6 +8,8 @@ textColors = Array.from(ballColors);
 var treeSymbolsColors = {'M': 'green', '|': 'saddlebrown'};
 starColor = 'red';
 
+var widthPrecision = 10, heightPrecision = 3;
+
 
 
 // helper functions and variables
@@ -78,8 +80,14 @@ window.onload = function() {
 	window.onresize = function() {
 
 		// calculate size
-		width = Math.floor(window.innerWidth/8.5);
-		height = Math.floor(window.innerHeight/18);
+		pre = document.createElement('pre');
+		pre.style.visibility="hidden";
+		pre.style.position = "absolute"
+		document.body.append(pre);
+		pre.innerText += '*'.repeat(widthPrecision);
+		width = Math.ceil(window.innerWidth/pre.clientWidth*widthPrecision);
+		pre.innerHTML += '*<br>'.repeat(heightPrecision);
+		height = Math.ceil(window.innerHeight/pre.clientHeight*heightPrecision);
 		
 		// init empty space for snow
 		var snowBlock = document.getElementById('snow');
