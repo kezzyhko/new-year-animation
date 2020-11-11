@@ -13,8 +13,8 @@ body {
 }
 #H {
 	color: orchid;
-	font-size: 3em;
-	word-spacing: 50px;
+	font-size: min(3em, 10vw);
+	white-space: nowrap;
 	z-index: 100;
 	/*user-select: text;*/
 }
