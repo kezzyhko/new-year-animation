@@ -2,6 +2,8 @@
 
 var wind = -1, snowhillHeight = 3, fallingRate = 1/30, meltingRate = 15/1000, speed = 6;
 
+var snowSymbol = '*';
+
 var ballSymbols = ['/', '\\', '_', '"', '<', '>', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 var ballColors = ['purple', 'brown', 'orange', 'tomato', 'orchid', 'navy', 'fuchsia'];
 textColors = Array.from(ballColors);
@@ -86,9 +88,9 @@ window.onload = function() {
 		pre.style.visibility="hidden";
 		pre.style.position = "absolute"
 		document.body.append(pre);
-		pre.innerText += '*'.repeat(widthPrecision);
+		pre.innerText += ' '.repeat(widthPrecision);
 		width = Math.ceil(window.innerWidth/pre.clientWidth*widthPrecision);
-		pre.innerHTML += '*<br>'.repeat(heightPrecision);
+		pre.innerHTML += ' <br>'.repeat(heightPrecision);
 		height = Math.ceil(window.innerHeight/pre.clientHeight*heightPrecision);
 		
 		// init empty space for snow
@@ -108,15 +110,15 @@ window.onload = function() {
 	function moveSnow() {
 		for (let i = height - 1; i >= 0; i--) {
 			if (Math.random() < fallingRate) {
-				snow[i][0] = '*';
+				snow[i][0] = snowSymbol;
 			}
 			if (Math.random() < fallingRate) {
-				snow[i][width-1] = '*';
+				snow[i][width-1] = snowSymbol;
 			}
 		}
 		for (let j = width - 1; j >= 0; j--) {
 			if (Math.random() < fallingRate) {
-				snow[0][j] = '*';
+				snow[0][j] = snowSymbol;
 			}
 			if (Math.random() < meltingRate) {
 				snow[height-1][j] = ' ';
@@ -125,10 +127,10 @@ window.onload = function() {
 		for (let i = height - 1; i >= 1; i--) {
 			for (let j = width - 1; j >= 0; j--) {
 				let rand = randomElement([-1, 0, 1]) + wind;
-				if (snow[i-1][j] == '*') {
-					snow[i][j+rand] = '*';
+				if (snow[i-1][j] == snowSymbol) {
+					snow[i][j+rand] = snowSymbol;
 				}
-				if (i <= height-snowhillHeight || snow[i][j-1]+snow[i][j]+snow[i][j+1] != '***') {
+				if (i <= height-snowhillHeight || snow[i][j-1]+snow[i][j]+snow[i][j+1] != snowSymbol.repeat(3)) {
 					snow[i-1][j] = ' ';
 				}
 			}
