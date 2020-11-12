@@ -19,22 +19,24 @@ function randomElement(arr) {
 }
 
 var moveSnowInterval = null;
+var snow = null;
 var treeSymbols = Object.getOwnPropertyNames(treeSymbolsColors);
-
 
 
 window.onload = function() {
 
 	// helper variables
-	var picture = document.getElementById('picture').innerText;
+	var snowBlock = document.getElementById('snow');
 	var treeBlock = document.getElementById('tree');
+	var H = document.getElementById('H');
+	var picture = document.getElementById('picture').innerText;
 
 	// change dots to current year
 	picture = picture.replace('....', new Date().getFullYear() + 1);
 
 	// make everything colorful
 	treeBlock.innerHTML = '';
-	for (var i = 0; i <= picture.length - 1; i++) {
+	for (let i = 0; i <= picture.length - 1; i++) {
 		if (ballSymbols.indexOf(picture[i]) >= 0) {
 			symbol = picture[i];
 			
@@ -68,13 +70,13 @@ window.onload = function() {
 	document.getElementById('picture').hidden = true;
 	
 	// blinking h1 text
-	var H = document.getElementById('H');
 	function blinkText(delay) {
 		if (delay < 300) delay = 1000;
 		setTimeout(blinkText, delay, delay/1.1);
 		H.style.color = randomElement(textColors);
 	}
 	blinkText(0);
+
 
 	// window size dependent code
 	window.onresize = function() {
@@ -90,52 +92,51 @@ window.onload = function() {
 		height = Math.ceil(window.innerHeight/pre.clientHeight*heightPrecision);
 		
 		// init empty space for snow
-		var snowBlock = document.getElementById('snow');
 		snowBlock.innerHTML = '';
-		var snow = Array(height).fill(null);
+		snow = Array(height).fill(null);
 		snow = snow.map(function(){return Array(width).fill(' ');});
 
 		// randomize initial snow
-		for (var i = 0; i <= 2*height; i++) {
+		for (let i = 0; i <= 2*height; i++) {
 			moveSnow();
 		}
-		
-		// start animation
-		function moveSnow() {
-			for (var i = height - 1; i >= 0; i--) {
-				if (Math.random() < fallingRate) {
-					snow[i][0] = '*';
-				}
-				if (Math.random() < fallingRate) {
-					snow[i][width-1] = '*';
-				}
-			}
-			for (var j = width - 1; j >= 0; j--) {
-				if (Math.random() < fallingRate) {
-					snow[0][j] = '*';
-				}
-				if (Math.random() < meltingRate) {
-					snow[height-1][j] = ' ';
-				}
-			}
-			for (var i = height - 1; i >= 1; i--) {
-				for (var j = width - 1; j >= 0; j--) {
-					var rand = randomElement([-1, 0, 1]) + wind;
-					if (snow[i-1][j] == '*') {
-						snow[i][j+rand] = '*';
-					}
-					if (i <= height-snowhillHeight || snow[i][j-1]+snow[i][j]+snow[i][j+1] != '***') {
-						snow[i-1][j] = ' ';
-					}
-				}
-			}
-
-			snowBlock.innerText = snow.map(function(line){return line.slice(0, width).join('');}).join('\n');
-		}
-		clearInterval(moveSnowInterval);
-		moveSnowInterval = setInterval(moveSnow, 1000/speed);
 
 	}
 	window.onresize();
+		
+	// the animation code
+	function moveSnow() {
+		for (let i = height - 1; i >= 0; i--) {
+			if (Math.random() < fallingRate) {
+				snow[i][0] = '*';
+			}
+			if (Math.random() < fallingRate) {
+				snow[i][width-1] = '*';
+			}
+		}
+		for (let j = width - 1; j >= 0; j--) {
+			if (Math.random() < fallingRate) {
+				snow[0][j] = '*';
+			}
+			if (Math.random() < meltingRate) {
+				snow[height-1][j] = ' ';
+			}
+		}
+		for (let i = height - 1; i >= 1; i--) {
+			for (let j = width - 1; j >= 0; j--) {
+				let rand = randomElement([-1, 0, 1]) + wind;
+				if (snow[i-1][j] == '*') {
+					snow[i][j+rand] = '*';
+				}
+				if (i <= height-snowhillHeight || snow[i][j-1]+snow[i][j]+snow[i][j+1] != '***') {
+					snow[i-1][j] = ' ';
+				}
+			}
+		}
+
+		snowBlock.innerText = snow.map(function(line){return line.slice(0, width).join('');}).join('\n');
+	}
+
+	moveSnowInterval = setInterval(moveSnow, 1000/speed);
 
 }
