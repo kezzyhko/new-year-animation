@@ -4,13 +4,6 @@ body {
 	text-align: center;
 	user-select: none;
 }
-#tree, #snow {
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	margin: 0;
-}
 #H {
 	color: orchid;
 	font-size: min(3em, 10vw);
@@ -18,19 +11,67 @@ body {
 	z-index: 100;
 	/*user-select: text;*/
 }
+#audio {
+	/*position: absolute;
+	top: 0;
+	left: 0;*/
+	z-index: 1;
+    outline: none;
+}
+
+
+
+#sidebar {
+	position: absolute;
+	top: 0;
+	width: 300px;
+	left: -300px;
+	transition: left .5s;
+	height: calc(100vh - 30px);
+	padding-top: 30px;
+	background: rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+}
+@media only screen and (max-width: 800px) {
+	#sidebar {
+		width: 100vw;
+		left: -100vw;
+		background: lightcyan;
+	}
+}
+#sidebar-checkbox {
+	display: none;
+}
+#sidebar-label {
+	cursor: pointer;
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	font-size: 50px;
+	line-height: 25px;
+	color: darkblue;
+	font-weight: bold;
+	z-index: 1001;
+}
+#sidebar-checkbox:checked ~ #sidebar {
+	left: 0;
+	transition: left .5s;
+}
+
+
+
+#tree, #snow {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0;
+	z-index: -100;
+}
 #tree {
 	font-weight: bold;
 }
 #snow {
 	color: blue;
 	overflow: hidden;
-	z-index: -100;
-}
-#audio {
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 1;
-	color: red;
-    outline: none;
 }

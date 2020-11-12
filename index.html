@@ -20,10 +20,17 @@
 				Но Вы всё ещё можете послушать музыку!
 			</p>
 		</noscript>
-		<audio autoplay loop id="audio" controls>
-			<source src="music.ogg" type="audio/ogg">
-			<source src="music.mp3" type="audio/mpeg">
-		</audio>
+
+		<label for="sidebar-checkbox" id="sidebar-label">≡</label>
+		<input type="checkbox" id="sidebar-checkbox" tabindex="0">
+		<div id="sidebar">
+			In future, there will be more settings
+			<audio autoplay loop id="audio" controls>
+				<source src="music.ogg" type="audio/ogg">
+				<source src="music.mp3" type="audio/mpeg">
+			</audio>
+		</div>
+
 		<pre id="tree"></pre>
 		<pre id="snow"></pre>
 		<pre id="picture" type="text/plain">
