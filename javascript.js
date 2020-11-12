@@ -110,10 +110,10 @@ window.onload = function() {
 	// the animation code
 	function moveSnow() {
 		for (let i = height - 1; i >= 0; i--) {
-			if (Math.random() < fallingRate) {
+			if (Math.random() < fallingRate*Math.abs(wind)) {
 				snow[i][0] = snowSymbol;
 			}
-			if (Math.random() < fallingRate) {
+			if (Math.random() < fallingRate*Math.abs(wind)) {
 				snow[i][width-1] = snowSymbol;
 			}
 		}
