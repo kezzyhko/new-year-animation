@@ -25,15 +25,16 @@ var snow = null;
 var treeSymbols = Object.getOwnPropertyNames(treeSymbolsColors);
 
 
-window.onload = function() {
+
+document.addEventListener("DOMContentLoaded", function() {
 
 	// helper variables
+	var picture = document.getElementById('picture').innerText;
 	var snowBlock = document.getElementById('snow');
 	var treeBlock = document.getElementById('tree');
 	var H = document.getElementById('H');
-	var picture = document.getElementById('picture').innerText;
 
-	// change dots to current year
+	// change dots in the tree's star to current year
 	picture = picture.replace('....', new Date().getFullYear() + 1);
 
 	// make everything colorful
@@ -80,13 +81,48 @@ window.onload = function() {
 	blinkText(0);
 
 
-	// window size dependent code
-	window.onresize = function() {
+	// the animation code
+	function moveSnow() {
+		for (let i = height - 1; i >= 0; i--) {
+			if (Math.random() < fallingRate*Math.abs(wind)) {
+				snow[i][0] = snowSymbol;
+			}
+			if (Math.random() < fallingRate*Math.abs(wind)) {
+				snow[i][width-1] = snowSymbol;
+			}
+		}
 
+		for (let j = width - 1; j >= 0; j--) {
+			if (Math.random() < fallingRate) {
+				snow[0][j] = snowSymbol;
+			}
+			if (Math.random() < meltingRate) {
+				snow[height-1][j] = ' ';
+			}
+		}
+
+		for (let i = height - 1; i >= 1; i--) {
+			for (let j = width - 1; j >= 0; j--) {
+				let rand = randomElement([-1, 0, 1]) + wind;
+				if (snow[i-1][j] == snowSymbol) {
+					snow[i][j+rand] = snowSymbol;
+				}
+				if (i <= height-snowhillHeight || snow[i][j-1]+snow[i][j]+snow[i][j+1] != snowSymbol.repeat(3)) {
+					snow[i-1][j] = ' ';
+				}
+			}
+		}
+
+		snowBlock.innerText = snow.map(function(line){return line.slice(0, width).join('');}).join('\n');
+	}
+
+
+	// snow initialization
+	function initSnow() {
 		// calculate size
 		pre = document.createElement('pre');
-		pre.style.visibility="hidden";
-		pre.style.position = "absolute"
+		pre.style.visibility = 'hidden';
+		pre.style.position = 'absolute';
 		document.body.append(pre);
 		pre.innerText += ' '.repeat(widthPrecision);
 		width = Math.ceil(window.innerWidth/pre.clientWidth*widthPrecision);
@@ -103,43 +139,11 @@ window.onload = function() {
 		for (let i = 0; i <= 2*height; i++) {
 			moveSnow();
 		}
-
 	}
-	window.onresize();
-		
-	// the animation code
-	function moveSnow() {
-		for (let i = height - 1; i >= 0; i--) {
-			if (Math.random() < fallingRate*Math.abs(wind)) {
-				snow[i][0] = snowSymbol;
-			}
-			if (Math.random() < fallingRate*Math.abs(wind)) {
-				snow[i][width-1] = snowSymbol;
-			}
-		}
-		for (let j = width - 1; j >= 0; j--) {
-			if (Math.random() < fallingRate) {
-				snow[0][j] = snowSymbol;
-			}
-			if (Math.random() < meltingRate) {
-				snow[height-1][j] = ' ';
-			}
-		}
-		for (let i = height - 1; i >= 1; i--) {
-			for (let j = width - 1; j >= 0; j--) {
-				let rand = randomElement([-1, 0, 1]) + wind;
-				if (snow[i-1][j] == snowSymbol) {
-					snow[i][j+rand] = snowSymbol;
-				}
-				if (i <= height-snowhillHeight || snow[i][j-1]+snow[i][j]+snow[i][j+1] != snowSymbol.repeat(3)) {
-					snow[i-1][j] = ' ';
-				}
-			}
-		}
+	window.addEventListener('resize', initSnow);
+	initSnow();
 
-		snowBlock.innerText = snow.map(function(line){return line.slice(0, width).join('');}).join('\n');
-	}
-
+	// start the animation
 	moveSnowInterval = setInterval(moveSnow, 1000/speed);
 
-}
+});

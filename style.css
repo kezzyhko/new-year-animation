@@ -9,13 +9,8 @@ body {
 	font-size: min(3em, 10vw);
 	white-space: nowrap;
 	z-index: 100;
-	/*user-select: text;*/
 }
 #audio {
-	/*position: absolute;
-	top: 0;
-	left: 0;*/
-	z-index: 1;
     outline: none;
 }
 
@@ -53,7 +48,7 @@ body {
 	font-weight: bold;
 	z-index: 1001;
 }
-#sidebar-checkbox:checked ~ #sidebar {
+#sidebar-checkbox:checked ~ #sidebar, #sidebar:focus-within {
 	left: 0;
 	transition: left .5s;
 }
