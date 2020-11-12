@@ -92,6 +92,7 @@ window.onload = function() {
 		width = Math.ceil(window.innerWidth/pre.clientWidth*widthPrecision);
 		pre.innerHTML += ' <br>'.repeat(heightPrecision);
 		height = Math.ceil(window.innerHeight/pre.clientHeight*heightPrecision);
+		pre.remove();
 		
 		// init empty space for snow
 		snowBlock.innerHTML = '';
