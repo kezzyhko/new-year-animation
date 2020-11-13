@@ -45,7 +45,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	// change dots in the tree's star to current year
-	picture = picture.replace('....', new Date().getFullYear() + 1);
+	let now = new Date();
+	picture = picture.replace('....', now.getFullYear() + (now.getMonth() >= 6 ? 1 : 0));
 
 	// make everything colorful
 	treeBlock.innerHTML = '';
@@ -116,9 +117,9 @@ document.addEventListener("DOMContentLoaded", function() {
 				if (snow[i][j] != ' ') {
 					snow[i][j] = snowSymbol;
 				}
-				let rand = randomElement([-1, 0, 1]) + wind;
 				if (snow[i-1][j] != ' ') {
-					snow[i][j+rand] = snowSymbol;
+					let rand = randomElement([-1, 0, 1]);
+					snow[i][j+rand+wind] = snowSymbol;
 				}
 				if (i <= height-snowhillHeight || snow[i][j-1] == ' ' || snow[i][j] == ' ' || snow[i][j+1] == ' ') {
 					snow[i-1][j] = ' ';
