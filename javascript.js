@@ -1,6 +1,6 @@
 // constants
 
-var wind, speed, snowhillHeight, fallingRate = 1/30, meltingRate = 15/1000, snowSymbol;
+var wind = -1, speed = 37, snowhillHeight = 3, fallingRate = 1/30, meltingRate = 15/1000, snowSymbol = '*';
 
 var ballSymbols = ['/', '\\', '_', '"', '<', '>', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 var ballColors = ['purple', 'brown', 'orange', 'tomato', 'orchid', 'navy', 'fuchsia'];
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 	for (let i = 0; i < settingInputs.length; i++) {
 		let s = settingInputs[i];
-		settingChanged(s); //initial settings
+		s.value = window[s.name]; //initial settings
 		s.addEventListener('input', function(e) {settingChanged(e.target)});
 	}
 
