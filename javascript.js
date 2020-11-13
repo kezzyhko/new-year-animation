@@ -35,7 +35,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// handle setting inputs
 	function settingChanged(s) {
-		window[s.name] = (s.type === 'range') ? parseInt(s.value) : s.value;
+		window[s.name] = (s.type === 'range') ? parseFloat(s.value) : s.value;
+		console.log(s.value);
 	}
 	for (let i = 0; i < settingInputs.length; i++) {
 		let s = settingInputs[i];
