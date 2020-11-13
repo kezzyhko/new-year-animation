@@ -1,8 +1,6 @@
 // constants
 
-var wind = -1, snowhillHeight = 3, fallingRate = 1/30, meltingRate = 15/1000, speed = 6;
-
-var snowSymbol = '*';
+var wind, speed, snowhillHeight = 3, fallingRate = 1/30, meltingRate = 15/1000, snowSymbol = '*';
 
 var ballSymbols = ['/', '\\', '_', '"', '<', '>', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 var ballColors = ['purple', 'brown', 'orange', 'tomato', 'orchid', 'navy', 'fuchsia'];
@@ -10,7 +8,7 @@ textColors = Array.from(ballColors);
 var treeSymbolsColors = {'M': 'green', '|': 'saddlebrown'};
 starColor = 'red';
 
-var widthPrecision = 10, heightPrecision = 3;
+var widthPrecision = 10, heightPrecision = 3, speedBase = 1.05;
 
 
 
@@ -33,6 +31,17 @@ document.addEventListener("DOMContentLoaded", function() {
 	var snowBlock = document.getElementById('snow');
 	var treeBlock = document.getElementById('tree');
 	var H = document.getElementById('H');
+	var settingInputs = document.getElementsByClassName('setting');
+
+	// handle setting inputs
+	function settingChanged(e) {
+		window[e.target.name] = parseInt(e.target.value);
+	}
+	for (let i = 0; i < settingInputs.length; i++) {
+		let s = settingInputs[i];
+		window[s.name] = parseInt(s.value); //initial settings
+		s.addEventListener('input', settingChanged);
+	}
 
 	// change dots in the tree's star to current year
 	picture = picture.replace('....', new Date().getFullYear() + 1);
@@ -144,6 +153,10 @@ document.addEventListener("DOMContentLoaded", function() {
 	initSnow();
 
 	// start the animation
-	moveSnowInterval = setInterval(moveSnow, 1000/speed);
+	function moveSnowInterval() {
+		moveSnow();
+		setTimeout(moveSnowInterval, 1000/Math.pow(speedBase, speed));
+	}
+	moveSnowInterval();
 
 });
