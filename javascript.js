@@ -1,6 +1,6 @@
 // constants
 
-var wind, speed, snowhillHeight = 3, fallingRate = 1/30, meltingRate = 15/1000, snowSymbol = '*';
+var wind, speed, snowhillHeight, fallingRate = 1/30, meltingRate = 15/1000, snowSymbol;
 
 var ballSymbols = ['/', '\\', '_', '"', '<', '>', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 var ballColors = ['purple', 'brown', 'orange', 'tomato', 'orchid', 'navy', 'fuchsia'];
@@ -34,13 +34,13 @@ document.addEventListener("DOMContentLoaded", function() {
 	var settingInputs = document.getElementsByClassName('setting');
 
 	// handle setting inputs
-	function settingChanged(e) {
-		window[e.target.name] = parseInt(e.target.value);
+	function settingChanged(s) {
+		window[s.name] = (s.type === 'range') ? parseInt(s.value) : s.value;
 	}
 	for (let i = 0; i < settingInputs.length; i++) {
 		let s = settingInputs[i];
-		window[s.name] = parseInt(s.value); //initial settings
-		s.addEventListener('input', settingChanged);
+		settingChanged(s); //initial settings
+		s.addEventListener('input', function(e) {settingChanged(e.target)});
 	}
 
 	// change dots in the tree's star to current year
@@ -112,11 +112,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		for (let i = height - 1; i >= 1; i--) {
 			for (let j = width - 1; j >= 0; j--) {
+				if (snow[i][j] != ' ') {
+					snow[i][j] = snowSymbol;
+				}
 				let rand = randomElement([-1, 0, 1]) + wind;
-				if (snow[i-1][j] == snowSymbol) {
+				if (snow[i-1][j] != ' ') {
 					snow[i][j+rand] = snowSymbol;
 				}
-				if (i <= height-snowhillHeight || snow[i][j-1]+snow[i][j]+snow[i][j+1] != snowSymbol.repeat(3)) {
+				if (i <= height-snowhillHeight || snow[i][j-1] == ' ' || snow[i][j] == ' ' || snow[i][j+1] == ' ') {
 					snow[i-1][j] = ' ';
 				}
 			}
