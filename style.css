@@ -11,7 +11,36 @@ body {
 	z-index: 100;
 }
 #audio {
-    outline: none;
+    display: none;
+}
+
+
+
+@font-face {
+	font-family: 'symbols';
+	src: url('symbols.woff') format('woff'), url('symbols.ttf') format('truetype');
+}
+.icon {
+	font-family: symbols;
+	cursor: pointer;
+	color: darkblue;
+	vertical-align: middle;
+}
+#sidebar-label {
+	position: fixed;
+	top: 5px;
+	left: 5px;
+	font-size: 50px;
+	line-height: 25px;
+	z-index: 1001;
+}
+#sidebar-first-row {
+	margin-left: 50px;
+	height: 30px;
+	font-size: 30px;
+	line-height: 30px;
+	text-align: left;
+	white-space: nowrap;
 }
 
 
@@ -22,8 +51,7 @@ body {
 	width: 300px;
 	left: -300px;
 	transition: left .5s;
-	height: calc(100vh - 30px);
-	padding-top: 30px;
+	height: 100%;
 	background: rgba(0, 0, 0, 0.1);
 	z-index: 1000;
 	overflow: auto;
@@ -37,17 +65,6 @@ body {
 }
 #sidebar-checkbox {
 	display: none;
-}
-#sidebar-label {
-	cursor: pointer;
-	position: fixed;
-	top: 5px;
-	left: 5px;
-	font-size: 50px;
-	line-height: 25px;
-	color: darkblue;
-	font-weight: bold;
-	z-index: 1001;
 }
 #sidebar-checkbox:checked ~ #sidebar, #sidebar:focus-within {
 	left: 0;

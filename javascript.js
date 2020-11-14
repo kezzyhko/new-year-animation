@@ -1,6 +1,6 @@
 // constants
 
-var wind = -1, speed = 37, snowhillHeight = 3, fallingRate = 1/30, meltingRate = 15/1000, snowSymbol = '*';
+var wind = -1, speed = 37, snowhillHeight = 3, fallingRate = 1/30, meltingRate = 15/1000, snowSymbol = '*', volume = 0.1;
 
 var ballSymbols = ['/', '\\', '_', '"', '<', '>', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 var ballColors = ['purple', 'brown', 'orange', 'tomato', 'orchid', 'navy', 'fuchsia'];
@@ -32,11 +32,46 @@ document.addEventListener("DOMContentLoaded", function() {
 	var treeBlock = document.getElementById('tree');
 	var H = document.getElementById('H');
 	var settingInputs = document.getElementsByClassName('setting');
+	var fullscreenButton = document.getElementById('fullscreen-button');
+	var audio = document.getElementById('audio');
+	var muteButton = document.getElementById('mute-button');
+	var volumeChange = document.getElementById('volume-change');
 
-	// handle setting inputs
+	// handle special buttons
+	fullscreenButton.addEventListener('click', function(e) {
+		let promise;
+		if (document.fullscreen) {
+			promise = document.exitFullscreen();
+		} else {
+			promise = document.documentElement.requestFullscreen();
+		}
+		promise.then(e => {
+			fullscreenButton.innerHTML = document.fullscreen ? '&#59207;' : '&#59205;';
+		}).catch(alert);
+	});
+	muteButton.addEventListener('click', function(e) {
+		if (audio.paused) {
+			audio.play().then(e => {
+				muteButton.innerHTML = '&#57395;';
+			}).catch(alert);
+		} else {
+			audio.pause();
+			muteButton.innerHTML = '&#57356;';
+		}
+	});
+	volumeChange.addEventListener('input', function(e) {
+		if (audio.paused) {
+			audio.play().then(e => {
+				muteButton.innerHTML = '&#57395;';
+			}).catch(alert);
+		}
+		audio.volume = e.target.value;
+	});
+	audio.volume = volume;
+
+	// handle settings inputs
 	function settingChanged(s) {
 		window[s.name] = (s.type === 'range') ? parseFloat(s.value) : s.value;
-		console.log(s.value);
 	}
 	for (let i = 0; i < settingInputs.length; i++) {
 		let s = settingInputs[i];
