@@ -8,41 +8,72 @@ starColor = 'red';
 
 var widthPrecision = 10, heightPrecision = 3, speedBase = 1.05;
 
-var settingPresets = {
-	'Snow': {
-		wind: -1,
-		speed: 37,
-		snowhillHeight: 3,
-		fallingRate: 1/30,
-		meltingRate: 15/1000,
-		snowSymbol: '*',
-	},
-	'Blizzard': {
-		wind: 5,
-		speed: 70,
-		snowhillHeight: 10,
-		fallingRate: 0.03,
-		meltingRate: 0.005,
-		snowSymbol: '*',
-	},
-	'Rain to the left': {
-		wind: -1,
-		speed: 80,
-		snowhillHeight: 1,
-		fallingRate: 0.04,
-		meltingRate: 0.1,
-		snowSymbol: '/',
-	},
-};
-settingPresets['Rain to the right'] = Object.assign({}, settingPresets['Rain 1']); 
-settingPresets['Rain to the right'].wind = 1;
-settingPresets['Rain to the right'].snowSymbol = '\\';
-var settings = Object.assign({}, settingPresets['Snow']); 
-settings.volume = 0.1;
+
+
+// settings
+
+	// presets
+	var settingPresets = {
+		'Snow': {
+			wind: -1,
+			speed: 37,
+			snowhillHeight: 3,
+			fallingRate: 1/30,
+			meltingRate: 15/1000,
+			snowSymbol: '*',
+		},
+		'Blizzard': {
+			wind: 5,
+			speed: 70,
+			snowhillHeight: 10,
+			fallingRate: 0.03,
+			meltingRate: 0.005,
+			snowSymbol: '*',
+		},
+		'Rain to the left': {
+			wind: -1,
+			speed: 80,
+			snowhillHeight: 1,
+			fallingRate: 0.04,
+			meltingRate: 0.1,
+			snowSymbol: '/',
+		},
+	};
+	settingPresets['Rain to the right'] = Object.assign({}, settingPresets['Rain 1']); 
+	settingPresets['Rain to the right'].wind = 1;
+	settingPresets['Rain to the right'].snowSymbol = '\\';
+
+	// localStorage management
+	settings = {}
+	function g(key) {
+		if (key in settings) {
+			return settings[key];
+		}
+		let type_and_value = window.localStorage.getItem('new-year-animation|'+key);
+		if (type_and_value == null) {
+			return null;
+		}
+		let [type, value] = type_and_value.split('|');
+		let result = (type == 'number') ? parseFloat(value) : value;
+		settings[key] = result;
+		return result;
+	}
+	function s(key, value, overwrite=true) {
+		if (overwrite || g(key) == null) {
+			settings[key] = value;
+			window.localStorage.setItem('new-year-animation|'+key, (typeof value)+'|'+value);
+		}
+	}
+
+	// default settings
+	for (const [name, value] of Object.entries(settingPresets['Snow'])) {
+		s(name, value, false);
+	}
+	s('volume', 0.1, false);
 
 
 
-// helper functions and variables
+// other helper functions and variables
 
 function randomElement(arr) {
 	return arr[Math.floor(Math.random()*arr.length)];
@@ -68,14 +99,13 @@ document.addEventListener("DOMContentLoaded", function() {
 	var settingPresetsSelect = document.getElementById('setting-presets-select');
 
 	// handle settings inputs
-	function settingChanged(s) {
-		settings[s.name] = (s.type === 'range') ? parseFloat(s.value) : s.value;
-	}
 	for (let i = 0; i < settingInputs.length; i++) {
-		let s = settingInputs[i];
-		s.value = settings[s.name]; //initial settings
-		s.id = s.name + "-setting";
-		s.addEventListener('input', function(e) {settingChanged(e.target)});
+		let input = settingInputs[i];
+		input.value = g(input.name);
+		input.id = input.name + "-setting";
+		input.addEventListener('input', function(e) {
+			s(e.target.name, (e.target.type === 'range') ? parseFloat(e.target.value) : e.target.value);
+		});
 	}
 
 
@@ -113,9 +143,9 @@ document.addEventListener("DOMContentLoaded", function() {
 				}).catch(alert);
 			}
 			audio.volume = e.target.value;
-			settings.volume = e.target.value;
+			s('volume', e.target.value);
 		});
-		audio.volume = settings.volume;
+		audio.volume = g('volume');
 
 		// setting presets select and button
 		for (const presetName of Object.keys(settingPresets)) {
@@ -125,8 +155,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 		settingPresetsSelect.addEventListener('change', function(e) {
 			let preset = settingPresets[e.target.value];
-			Object.assign(settings, preset);
 			for (const [name, value] of Object.entries(preset)) {
+				s(name, value);
 				document.getElementById(name+"-setting").value = value;
 			}
 			e.target.value = '';
@@ -184,19 +214,19 @@ document.addEventListener("DOMContentLoaded", function() {
 	// the animation code
 	function moveSnow() {
 		for (let i = height - 1; i >= 0; i--) {
-			if (Math.random() < settings.fallingRate*Math.abs(settings.wind)) {
-				snow[i][0] = settings.snowSymbol;
+			if (Math.random() < g('fallingRate')*Math.abs(g('wind'))) {
+				snow[i][0] = g('snowSymbol');
 			}
-			if (Math.random() < settings.fallingRate*Math.abs(settings.wind)) {
-				snow[i][width-1] = settings.snowSymbol;
+			if (Math.random() < g('fallingRate')*Math.abs(g('wind'))) {
+				snow[i][width-1] = g('snowSymbol');
 			}
 		}
 
 		for (let j = width - 1; j >= 0; j--) {
-			if (Math.random() < settings.fallingRate) {
-				snow[0][j] = settings.snowSymbol;
+			if (Math.random() < g('fallingRate')) {
+				snow[0][j] = g('snowSymbol');
 			}
-			if (Math.random() < settings.meltingRate) {
+			if (Math.random() < g('meltingRate')) {
 				snow[height-1][j] = ' ';
 			}
 		}
@@ -204,13 +234,13 @@ document.addEventListener("DOMContentLoaded", function() {
 		for (let i = height - 1; i >= 1; i--) {
 			for (let j = width - 1; j >= 0; j--) {
 				if (snow[i][j] != ' ') {
-					snow[i][j] = settings.snowSymbol;
+					snow[i][j] = g('snowSymbol');
 				}
 				if (snow[i-1][j] != ' ') {
 					let rand = randomElement([-1, 0, 1]);
-					snow[i][j+rand+settings.wind] = settings.snowSymbol;
+					snow[i][j+rand+g('wind')] = g('snowSymbol');
 				}
-				if (i <= height-settings.snowhillHeight || snow[i][j-1] == ' ' || snow[i][j] == ' ' || snow[i][j+1] == ' ') {
+				if (i <= height-g('snowhillHeight') || snow[i][j-1] == ' ' || snow[i][j] == ' ' || snow[i][j+1] == ' ') {
 					snow[i-1][j] = ' ';
 				}
 			}
@@ -249,7 +279,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	// start the animation
 	function moveSnowInterval() {
 		moveSnow();
-		setTimeout(moveSnowInterval, 1000/Math.pow(speedBase, settings.speed));
+		setTimeout(moveSnowInterval, 1000/Math.pow(speedBase, g('speed')));
 	}
 	moveSnowInterval();
 
