@@ -1,7 +1,5 @@
 // constants
 
-var wind = -1, speed = 37, snowhillHeight = 3, fallingRate = 1/30, meltingRate = 15/1000, snowSymbol = '*', volume = 0.1;
-
 var ballSymbols = ['/', '\\', '_', '"', '<', '>', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 var ballColors = ['purple', 'brown', 'orange', 'tomato', 'orchid', 'navy', 'fuchsia'];
 textColors = Array.from(ballColors);
@@ -9,6 +7,20 @@ var treeSymbolsColors = {'M': 'green', '|': 'saddlebrown'};
 starColor = 'red';
 
 var widthPrecision = 10, heightPrecision = 3, speedBase = 1.05;
+
+
+
+// settings
+
+var settings = {
+	wind: -1,
+	speed: 37,
+	snowhillHeight: 3,
+	fallingRate: 1/30,
+	meltingRate: 15/1000,
+	snowSymbol: '*',
+	volume: 0.1,
+};
 
 
 
@@ -66,16 +78,17 @@ document.addEventListener("DOMContentLoaded", function() {
 			}).catch(alert);
 		}
 		audio.volume = e.target.value;
+		settings.volume = e.target.value;
 	});
-	audio.volume = volume;
+	audio.volume = settings.volume;
 
 	// handle settings inputs
 	function settingChanged(s) {
-		window[s.name] = (s.type === 'range') ? parseFloat(s.value) : s.value;
+		settings[s.name] = (s.type === 'range') ? parseFloat(s.value) : s.value;
 	}
 	for (let i = 0; i < settingInputs.length; i++) {
 		let s = settingInputs[i];
-		s.value = window[s.name]; //initial settings
+		s.value = settings[s.name]; //initial settings
 		s.addEventListener('input', function(e) {settingChanged(e.target)});
 	}
 
@@ -130,19 +143,19 @@ document.addEventListener("DOMContentLoaded", function() {
 	// the animation code
 	function moveSnow() {
 		for (let i = height - 1; i >= 0; i--) {
-			if (Math.random() < fallingRate*Math.abs(wind)) {
-				snow[i][0] = snowSymbol;
+			if (Math.random() < settings.fallingRate*Math.abs(settings.wind)) {
+				snow[i][0] = settings.snowSymbol;
 			}
-			if (Math.random() < fallingRate*Math.abs(wind)) {
-				snow[i][width-1] = snowSymbol;
+			if (Math.random() < settings.fallingRate*Math.abs(settings.wind)) {
+				snow[i][width-1] = settings.snowSymbol;
 			}
 		}
 
 		for (let j = width - 1; j >= 0; j--) {
-			if (Math.random() < fallingRate) {
-				snow[0][j] = snowSymbol;
+			if (Math.random() < settings.fallingRate) {
+				snow[0][j] = settings.snowSymbol;
 			}
-			if (Math.random() < meltingRate) {
+			if (Math.random() < settings.meltingRate) {
 				snow[height-1][j] = ' ';
 			}
 		}
@@ -150,13 +163,13 @@ document.addEventListener("DOMContentLoaded", function() {
 		for (let i = height - 1; i >= 1; i--) {
 			for (let j = width - 1; j >= 0; j--) {
 				if (snow[i][j] != ' ') {
-					snow[i][j] = snowSymbol;
+					snow[i][j] = settings.snowSymbol;
 				}
 				if (snow[i-1][j] != ' ') {
 					let rand = randomElement([-1, 0, 1]);
-					snow[i][j+rand+wind] = snowSymbol;
+					snow[i][j+rand+settings.wind] = settings.snowSymbol;
 				}
-				if (i <= height-snowhillHeight || snow[i][j-1] == ' ' || snow[i][j] == ' ' || snow[i][j+1] == ' ') {
+				if (i <= height-settings.snowhillHeight || snow[i][j-1] == ' ' || snow[i][j] == ' ' || snow[i][j+1] == ' ') {
 					snow[i-1][j] = ' ';
 				}
 			}
@@ -195,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	// start the animation
 	function moveSnowInterval() {
 		moveSnow();
-		setTimeout(moveSnowInterval, 1000/Math.pow(speedBase, speed));
+		setTimeout(moveSnowInterval, 1000/Math.pow(speedBase, settings.speed));
 	}
 	moveSnowInterval();
 
