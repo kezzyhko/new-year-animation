@@ -42,6 +42,16 @@ var widthPrecision = 10, heightPrecision = 3, sidePadding = 8, speedBase = 1.05;
 	settingPresets['Rain to the right'] = Object.assign({}, settingPresets['Rain to the left']); 
 	settingPresets['Rain to the right'].wind = 1;
 	settingPresets['Rain to the right'].snowSymbol = '\\';
+	Object.assign(settingPresets, {
+		'Panic': {
+			wind: 0,
+			speed: 55,
+			snowhillHeight: 10,
+			fallingRate: 0.03,
+			meltingRate: 0.006,
+			snowSymbol: 'A',
+		},
+	});
 
 	// localStorage management
 	settings = {}
