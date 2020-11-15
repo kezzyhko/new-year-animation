@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	var muteButton = document.getElementById('mute-button');
 	var volumeChange = document.getElementById('volume-change');
 	var settingPresetsSelect = document.getElementById('setting-presets-select');
-	var settingPresetsApply = document.getElementById('setting-presets-apply');
 
 	// handle settings inputs
 	function settingChanged(s) {
@@ -116,12 +115,13 @@ document.addEventListener("DOMContentLoaded", function() {
 			option.innerText = option.value = presetName;
 			settingPresetsSelect.append(option);
 		}
-		settingPresetsApply.addEventListener('click', function(e) {
-			let preset = settingPresets[settingPresetsSelect.value];
+		settingPresetsSelect.addEventListener('change', function(e) {
+			let preset = settingPresets[e.target.value];
 			Object.assign(settings, preset);
 			for (const [name, value] of Object.entries(preset)) {
 				document.getElementById(name+"-setting").value = value;
 			}
+			e.target.value = '';
 		});
 
 
