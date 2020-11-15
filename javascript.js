@@ -17,7 +17,15 @@ var settingPresets = {
 		meltingRate: 15/1000,
 		snowSymbol: '*',
 	},
-	'Rain 1': {
+	'Blizzard': {
+		wind: 5,
+		speed: 70,
+		snowhillHeight: 10,
+		fallingRate: 0.03,
+		meltingRate: 0.005,
+		snowSymbol: '*',
+	},
+	'Rain to the left': {
 		wind: -1,
 		speed: 80,
 		snowhillHeight: 1,
@@ -26,9 +34,9 @@ var settingPresets = {
 		snowSymbol: '/',
 	},
 };
-settingPresets['Rain 2'] = Object.assign({}, settingPresets['Rain 1']); 
-settingPresets['Rain 2'].wind = 1;
-settingPresets['Rain 2'].snowSymbol = '\\';
+settingPresets['Rain to the right'] = Object.assign({}, settingPresets['Rain 1']); 
+settingPresets['Rain to the right'].wind = 1;
+settingPresets['Rain to the right'].snowSymbol = '\\';
 var settings = Object.assign({}, settingPresets['Snow']); 
 settings.volume = 0.1;
 
