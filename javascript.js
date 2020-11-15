@@ -8,19 +8,29 @@ starColor = 'red';
 
 var widthPrecision = 10, heightPrecision = 3, speedBase = 1.05;
 
-
-
-// settings
-
-var settings = {
-	wind: -1,
-	speed: 37,
-	snowhillHeight: 3,
-	fallingRate: 1/30,
-	meltingRate: 15/1000,
-	snowSymbol: '*',
-	volume: 0.1,
+var settingPresets = {
+	'Snow': {
+		wind: -1,
+		speed: 37,
+		snowhillHeight: 3,
+		fallingRate: 1/30,
+		meltingRate: 15/1000,
+		snowSymbol: '*',
+	},
+	'Rain 1': {
+		wind: -1,
+		speed: 80,
+		snowhillHeight: 1,
+		fallingRate: 0.04,
+		meltingRate: 0.1,
+		snowSymbol: '/',
+	},
 };
+settingPresets['Rain 2'] = Object.assign({}, settingPresets['Rain 1']); 
+settingPresets['Rain 2'].wind = 1;
+settingPresets['Rain 2'].snowSymbol = '\\';
+var settings = Object.assign({}, settingPresets['Snow']); 
+settings.volume = 0.1;
 
 
 
@@ -30,7 +40,6 @@ function randomElement(arr) {
 	return arr[Math.floor(Math.random()*arr.length)];
 }
 
-var moveSnowInterval = null;
 var snow = null;
 var treeSymbols = Object.getOwnPropertyNames(treeSymbolsColors);
 
@@ -48,39 +57,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	var audio = document.getElementById('audio');
 	var muteButton = document.getElementById('mute-button');
 	var volumeChange = document.getElementById('volume-change');
-
-	// handle special buttons
-	fullscreenButton.addEventListener('click', function(e) {
-		let promise;
-		if (document.fullscreen) {
-			promise = document.exitFullscreen();
-		} else {
-			promise = document.documentElement.requestFullscreen();
-		}
-		promise.then(e => {
-			fullscreenButton.innerHTML = document.fullscreen ? '&#59207;' : '&#59205;';
-		}).catch(alert);
-	});
-	muteButton.addEventListener('click', function(e) {
-		if (audio.paused) {
-			audio.play().then(e => {
-				muteButton.innerHTML = '&#57395;';
-			}).catch(alert);
-		} else {
-			audio.pause();
-			muteButton.innerHTML = '&#57356;';
-		}
-	});
-	volumeChange.addEventListener('input', function(e) {
-		if (audio.paused) {
-			audio.play().then(e => {
-				muteButton.innerHTML = '&#57395;';
-			}).catch(alert);
-		}
-		audio.volume = e.target.value;
-		settings.volume = e.target.value;
-	});
-	audio.volume = settings.volume;
+	var settingPresetsSelect = document.getElementById('setting-presets-select');
+	var settingPresetsApply = document.getElementById('setting-presets-apply');
 
 	// handle settings inputs
 	function settingChanged(s) {
@@ -89,8 +67,63 @@ document.addEventListener("DOMContentLoaded", function() {
 	for (let i = 0; i < settingInputs.length; i++) {
 		let s = settingInputs[i];
 		s.value = settings[s.name]; //initial settings
+		s.id = s.name + "-setting";
 		s.addEventListener('input', function(e) {settingChanged(e.target)});
 	}
+
+
+	// handle special buttons
+		// fullscreen icon
+		fullscreenButton.addEventListener('click', function(e) {
+			let promise;
+			if (document.fullscreen) {
+				promise = document.exitFullscreen();
+			} else {
+				promise = document.documentElement.requestFullscreen();
+			}
+			promise.then(e => {
+				fullscreenButton.innerHTML = document.fullscreen ? '&#59207;' : '&#59205;';
+			}).catch(alert);
+		});
+
+		// mute icon
+		muteButton.addEventListener('click', function(e) {
+			if (audio.paused) {
+				audio.play().then(e => {
+					muteButton.innerHTML = '&#57395;';
+				}).catch(alert);
+			} else {
+				audio.pause();
+				muteButton.innerHTML = '&#57356;';
+			}
+		});
+
+		// volume change slider
+		volumeChange.addEventListener('input', function(e) {
+			if (audio.paused) {
+				audio.play().then(e => {
+					muteButton.innerHTML = '&#57395;';
+				}).catch(alert);
+			}
+			audio.volume = e.target.value;
+			settings.volume = e.target.value;
+		});
+		audio.volume = settings.volume;
+
+		// setting presets select and button
+		for (const presetName of Object.keys(settingPresets)) {
+			let option = document.createElement('option');
+			option.innerText = option.value = presetName;
+			settingPresetsSelect.append(option);
+		}
+		settingPresetsApply.addEventListener('click', function(e) {
+			let preset = settingPresets[settingPresetsSelect.value];
+			Object.assign(settings, preset);
+			for (const [name, value] of Object.entries(preset)) {
+				document.getElementById(name+"-setting").value = value;
+			}
+		});
+
 
 	// change dots in the tree's star to current year
 	let now = new Date();
