@@ -87,4 +87,6 @@ body {
 #snow {
 	color: blue;
 	overflow: hidden;
+	display: flex;
+	justify-content: center;
 }

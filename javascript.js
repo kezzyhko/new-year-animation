@@ -6,7 +6,7 @@ textColors = Array.from(ballColors);
 var treeSymbolsColors = {'M': 'green', '|': 'saddlebrown'};
 starColor = 'red';
 
-var widthPrecision = 10, heightPrecision = 3, speedBase = 1.05;
+var widthPrecision = 10, heightPrecision = 3, sidePadding = 8, speedBase = 1.05;
 
 
 
@@ -39,7 +39,7 @@ var widthPrecision = 10, heightPrecision = 3, speedBase = 1.05;
 			snowSymbol: '/',
 		},
 	};
-	settingPresets['Rain to the right'] = Object.assign({}, settingPresets['Rain 1']); 
+	settingPresets['Rain to the right'] = Object.assign({}, settingPresets['Rain to the left']); 
 	settingPresets['Rain to the right'].wind = 1;
 	settingPresets['Rain to the right'].snowSymbol = '\\';
 
@@ -213,6 +213,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// the animation code
 	function moveSnow() {
+		for (let i = height - 1; i >= 1; i--) {
+			for (let j = width - 1; j >= 0; j--) {
+				if (snow[i][j] != ' ') {
+					snow[i][j] = g('snowSymbol');
+				}
+				if (snow[i-1][j] != ' ') {
+					let rand = randomElement([-1, 0, 1]);
+					snow[i][j+rand+g('wind')] = g('snowSymbol');
+				}
+				if (i <= height-g('snowhillHeight') || snow[i][j-1] == ' ' || snow[i][j] == ' ' || snow[i][j+1] == ' ') {
+					snow[i-1][j] = ' ';
+				}
+			}
+		}
+
 		for (let i = height - 1; i >= 0; i--) {
 			if (Math.random() < g('fallingRate')*Math.abs(g('wind'))) {
 				snow[i][0] = g('snowSymbol');
@@ -231,21 +246,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 		}
 
-		for (let i = height - 1; i >= 1; i--) {
-			for (let j = width - 1; j >= 0; j--) {
-				if (snow[i][j] != ' ') {
-					snow[i][j] = g('snowSymbol');
-				}
-				if (snow[i-1][j] != ' ') {
-					let rand = randomElement([-1, 0, 1]);
-					snow[i][j+rand+g('wind')] = g('snowSymbol');
-				}
-				if (i <= height-g('snowhillHeight') || snow[i][j-1] == ' ' || snow[i][j] == ' ' || snow[i][j+1] == ' ') {
-					snow[i-1][j] = ' ';
-				}
-			}
-		}
-
 		snowBlock.innerText = snow.map(function(line){return line.slice(0, width).join('');}).join('\n');
 	}
 
@@ -258,7 +258,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		pre.style.position = 'absolute';
 		document.body.append(pre);
 		pre.innerText += ' '.repeat(widthPrecision);
-		width = Math.ceil(window.innerWidth/pre.clientWidth*widthPrecision);
+		width = Math.ceil(window.innerWidth/pre.clientWidth*widthPrecision) + 2*sidePadding;
 		pre.innerHTML += ' <br>'.repeat(heightPrecision);
 		height = Math.ceil(window.innerHeight/pre.clientHeight*heightPrecision);
 		pre.remove();
