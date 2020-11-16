@@ -30,7 +30,28 @@ shareLinks = [
 
 // settings
 
-	settingNamesToShare = ['wind', 'speed', 'snowhillHeight', 'fallingRate', 'meltingRate', 'snowSymbol', 'blinkingText'];
+	// localStorage management
+	var settingNamesToShare = ['wind', 'speed', 'snowhillHeight', 'fallingRate', 'meltingRate', 'snowSymbol', 'blinkingText'];
+	var settings = {}
+	function g(key) {
+		if (key in settings) {
+			return settings[key];
+		}
+		let type_and_value = window.localStorage.getItem('new-year-animation|'+key);
+		if (type_and_value == null) {
+			return null;
+		}
+		let [type, value] = type_and_value.split('|');
+		let result = (type == 'number') ? parseFloat(value) : value;
+		settings[key] = result;
+		return result;
+	}
+	function s(key, value, overwrite=true) {
+		if (overwrite || g(key) == null) {
+			settings[key] = value;
+			window.localStorage.setItem('new-year-animation|'+key, (typeof value)+'|'+value);
+		}
+	}
 
 	// presets
 	var settingPresets = {
@@ -72,35 +93,15 @@ shareLinks = [
 			snowSymbol: 'A',
 		},
 	});
-
-	// localStorage management
-	settings = {}
-	function g(key) {
-		if (key in settings) {
-			return settings[key];
-		}
-		let type_and_value = window.localStorage.getItem('new-year-animation|'+key);
-		if (type_and_value == null) {
-			return null;
-		}
-		let [type, value] = type_and_value.split('|');
-		let result = (type == 'number') ? parseFloat(value) : value;
-		settings[key] = result;
-		return result;
-	}
-	function s(key, value, overwrite=true) {
-		if (overwrite || g(key) == null) {
-			settings[key] = value;
-			window.localStorage.setItem('new-year-animation|'+key, (typeof value)+'|'+value);
-		}
-	}
+	var defaultPresetName = 'Default (clear all settings)';
+	settingPresets[defaultPresetName] = Object.assign({}, settingPresets['Snow']);
+	settingPresets[defaultPresetName].blinkingText = 'HAPPY NEW YEAR';
 
 	// default settings
-	for (const [name, value] of Object.entries(settingPresets['Snow'])) {
+	for (const [name, value] of Object.entries(settingPresets[defaultPresetName])) {
 		s(name, value, false);
 	}
-	s('volume', 0.1, false);
-	s('blinkingText', "HAPPY NEW YEAR", false);
+	s('volume', 0.2, false);
 
 	// load settings from query string
 	let settingsFromQuery;
@@ -231,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 		audio.volume = g('volume');
 
-		// setting presets select and button
+		// setting presets select
 		for (const presetName of Object.keys(settingPresets)) {
 			let option = document.createElement('option');
 			option.innerText = option.value = presetName;
