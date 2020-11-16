@@ -89,11 +89,13 @@ var widthPrecision = 10, heightPrecision = 3, sidePadding = 8, speedBase = 1.05;
 		let query = document.location.search;
 		query = (query[0] == '?') ? query.replace('?', '') : query;
 		settingsFromQuery = JSON.parse(atob(query));
-	} catch {
-		settingsFromQuery = {};
-	}
-	for (const name of settingNamesToShare) {
-		s(name, settingsFromQuery[name]);
+		for (const name of settingNamesToShare) {
+			if (name in settingsFromQuery) {
+				s(name, settingsFromQuery[name]);
+			}
+		}
+	} catch (e) {
+		console.log(e);
 	}
 	let currentLink = new URL(document.location);
 	currentLink.search = '';
