@@ -15,7 +15,11 @@ body {
 
 
 
-.sidebar-section {
+.sidebar-sections {
+	overflow: auto;
+	height: calc(100% - 30px);
+}
+.sidebar-sections > div {
 	text-align: left;
 	padding: 10px;
 	box-sizing: border-box;
@@ -69,7 +73,6 @@ body {
 	height: 100%;
 	background: rgba(0, 0, 0, 0.1);
 	z-index: 1000;
-	overflow: auto;
 }
 @media only screen and (max-width: 800px) {
 	#sidebar {
