@@ -92,10 +92,12 @@ var widthPrecision = 10, heightPrecision = 3, sidePadding = 8, speedBase = 1.05;
 	} catch {
 		settingsFromQuery = {};
 	}
-	window.history.replaceState({}, document.title, document.location.href.replace(document.location.search, ''));
-	for (const [name, value] of Object.entries(settingsFromQuery)) {
-		s(name, value);
+	for (const name of settingNamesToShare) {
+		s(name, settingsFromQuery[name]);
 	}
+	let currentLink = new URL(document.location);
+	currentLink.search = '';
+	window.history.replaceState({}, document.title, currentLink.toString());
 
 
 
@@ -107,6 +109,7 @@ function randomElement(arr) {
 
 var snow = null;
 var treeSymbols = Object.getOwnPropertyNames(treeSymbolsColors);
+var shareLink = new URL(document.location.protocol + '//' + document.location.host + document.location.pathname);
 
 
 
@@ -123,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	var muteButton = document.getElementById('mute-button');
 	var volumeChange = document.getElementById('volume-change');
 	var settingPresetsSelect = document.getElementById('setting-presets-select');
-	var shareLink = document.getElementById('share-link');
+	var shareLinkInput = document.getElementById('share-link-input');
 	var shareLinkCopyButton = document.getElementById('share-link-copy-button');
 	var shareLinkIncludeSettings = document.getElementById('share-link-include-settings');
 
@@ -204,25 +207,26 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 
 		// share section
-		shareLink.value = document.location.href;
+		shareLinkInput.value = document.location.href;
 		shareLinkCopyButton.addEventListener('click', function(e) {
-			shareLink.focus();
-			shareLink.select();
+			shareLinkInput.focus();
+			shareLinkInput.select();
 			document.execCommand('copy');
 		});
-		shareLink.addEventListener('blur', function(e) {
+		shareLinkInput.addEventListener('blur', function(e) {
 			document.getSelection().removeAllRanges();
 		});
 		shareLinkIncludeSettings.addEventListener('change', function(e) {
-			shareLink.value = document.location.href;
 			if (e.target.checked) {
 				let settingsToShare = {};
 				for (const name of settingNamesToShare) {
 					settingsToShare[name] = g(name);
 				}
-				shareLink.value += '?';
-				shareLink.value += btoa(JSON.stringify(settingsToShare));
+				shareLink.search = btoa(JSON.stringify(settingsToShare));
+			} else {
+				shareLink.search = '';
 			}
+			shareLinkInput.value = shareLink.toString();
 		});
 
 
