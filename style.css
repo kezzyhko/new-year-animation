@@ -12,6 +12,11 @@ body {
 #audio {
     display: none;
 }
+a {
+	color: darkblue;
+	font-weight: bold;
+	text-decoration: none;
+}
 
 
 
