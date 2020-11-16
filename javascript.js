@@ -120,8 +120,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 	// handle special buttons
+		function toggleKeyPress(e) {
+			if (e.keyCode == 32 || e.keyCode == 13 || e.keyCode == 10) {
+				e.target.toggleFunction(e);
+			}
+		}
+
 		// fullscreen icon
-		fullscreenButton.addEventListener('click', function(e) {
+		function toggleFullscreen(e) {
 			let promise;
 			if (document.fullscreen) {
 				promise = document.exitFullscreen();
@@ -130,27 +136,33 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 			promise.then(e => {
 				fullscreenButton.innerHTML = document.fullscreen ? '&#59207;' : '&#59205;';
-			}).catch(alert);
-		});
+			}).catch(console.log);
+		}
+		fullscreenButton.toggleFunction = toggleFullscreen;
+		fullscreenButton.addEventListener('keydown', toggleKeyPress);
+		fullscreenButton.addEventListener('click', toggleFullscreen);
 
 		// mute icon
-		muteButton.addEventListener('click', function(e) {
+		function toggleMute(e) {
 			if (audio.paused) {
 				audio.play().then(e => {
 					muteButton.innerHTML = '&#57395;';
-				}).catch(alert);
+				}).catch(console.log);
 			} else {
 				audio.pause();
 				muteButton.innerHTML = '&#57356;';
 			}
-		});
+		}
+		muteButton.toggleFunction = toggleMute;
+		muteButton.addEventListener('keydown', toggleKeyPress);
+		muteButton.addEventListener('click', toggleMute);
 
 		// volume change slider
 		volumeChange.addEventListener('input', function(e) {
 			if (audio.paused) {
 				audio.play().then(e => {
 					muteButton.innerHTML = '&#57395;';
-				}).catch(alert);
+				}).catch(console.log);
 			}
 			audio.volume = e.target.value;
 			s('volume', e.target.value);

@@ -26,6 +26,9 @@ body {
 	color: darkblue;
 	vertical-align: middle;
 }
+.icon:not(:focus-visible) {
+	outline: none;
+}
 #sidebar-label {
 	position: fixed;
 	top: 5px;
