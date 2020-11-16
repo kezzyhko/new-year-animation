@@ -8,6 +8,24 @@ starColor = 'red';
 
 var widthPrecision = 10, heightPrecision = 3, sidePadding = 8, speedBase = 1.05;
 
+shareLinks = [
+	{
+		src: './brand-icons/twitter.svg',
+		alt: 'Twitter',
+		hrefbase: 'https://twitter.com/share?url=',
+	},
+	{
+		src: './brand-icons/facebook.svg',
+		alt: 'Facebook',
+		hrefbase: 'http://www.facebook.com/sharer.php?u=',
+	},
+	{
+		src: './brand-icons/vk.svg',
+		alt: 'VK',
+		hrefbase: 'https://vk.com/share.php?url=',
+	},
+];
+
 
 
 // settings
@@ -128,6 +146,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	var muteButton = document.getElementById('mute-button');
 	var volumeChange = document.getElementById('volume-change');
 	var settingPresetsSelect = document.getElementById('setting-presets-select');
+	var share = document.getElementById('share');
 	var shareLinkInput = document.getElementById('share-link-input');
 	var shareLinkCopyButton = document.getElementById('share-link-copy-button');
 	var shareLinkIncludeSettings = document.getElementById('share-link-include-settings');
@@ -144,10 +163,28 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 	// handle special buttons
-		function toggleKeyPress(e) {
+		function activateKeyPress(e) {
 			if (e.keyCode == 32 || e.keyCode == 13 || e.keyCode == 10) {
-				e.target.toggleFunction(e);
+				e.target.activateFunction(e);
 			}
+		}
+
+		// add social share buttons
+		function shareSocial(e) {
+			window.open(
+				e.target.hrefbase + encodeURIComponent(shareLinkInput.value),
+				'popUpWindow',
+				'height=400,width=600,left=10,top=10,,scrollbars=yes,menubar=no'
+			);
+		}
+		for (const shareLink of shareLinks) {
+			let img = document.createElement('img');
+			img.tabIndex = 0;
+			Object.assign(img, shareLink);
+			img.activateFunction = shareSocial;
+			img.addEventListener('keydown', activateKeyPress);
+			img.addEventListener('click', shareSocial);
+			share.append(img);
 		}
 
 		// fullscreen icon
@@ -162,8 +199,8 @@ document.addEventListener("DOMContentLoaded", function() {
 				fullscreenButton.innerHTML = document.fullscreen ? '&#59207;' : '&#59205;';
 			}).catch(console.log);
 		}
-		fullscreenButton.toggleFunction = toggleFullscreen;
-		fullscreenButton.addEventListener('keydown', toggleKeyPress);
+		fullscreenButton.activateFunction = toggleFullscreen;
+		fullscreenButton.addEventListener('keydown', activateKeyPress);
 		fullscreenButton.addEventListener('click', toggleFullscreen);
 
 		// mute icon
@@ -177,8 +214,8 @@ document.addEventListener("DOMContentLoaded", function() {
 				muteButton.innerHTML = '&#57356;';
 			}
 		}
-		muteButton.toggleFunction = toggleMute;
-		muteButton.addEventListener('keydown', toggleKeyPress);
+		muteButton.activateFunction = toggleMute;
+		muteButton.addEventListener('keydown', activateKeyPress);
 		muteButton.addEventListener('click', toggleMute);
 
 		// volume change slider

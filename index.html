@@ -13,9 +13,6 @@
 				#audio {
 					display: unset;
 				}
-				#sidebar-label {
-					display: none;
-				}
 			</style>
 		</noscript>
 	</head>
@@ -65,12 +62,11 @@
 				</div>
 				<div>
 					<span class="sidebar-section-header">Share</span>
-					Link:<br>
-					<input type="text" readonly id="share-link-input">
-					<button id="share-link-copy-button">Copy</button>
-					<br>
 					<input type="checkbox" id="share-link-include-settings">
-					<label for="share-link-include-settings">Include current settings</label>
+					<label for="share-link-include-settings">Include current settings</label><br>
+					<input type="text" readonly id="share-link-input">
+					<button id="share-link-copy-button">Copy</button><br>
+					<div id="share"></div>
 				</div>
 				<div>
 					<span class="sidebar-section-header">Credits</span>
