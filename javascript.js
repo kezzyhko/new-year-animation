@@ -30,7 +30,7 @@ shareLinks = [
 
 // settings
 
-	settingNamesToShare = ['wind', 'speed', 'snowhillHeight', 'fallingRate', 'meltingRate', 'snowSymbol'];
+	settingNamesToShare = ['wind', 'speed', 'snowhillHeight', 'fallingRate', 'meltingRate', 'snowSymbol', 'blinkingText'];
 
 	// presets
 	var settingPresets = {
@@ -100,6 +100,7 @@ shareLinks = [
 		s(name, value, false);
 	}
 	s('volume', 0.1, false);
+	s('blinkingText', "HAPPY NEW YEAR", false);
 
 	// load settings from query string
 	let settingsFromQuery;
@@ -314,6 +315,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		if (delay < 300) delay = 1000;
 		setTimeout(blinkText, delay, delay/1.1);
 		H.style.color = randomElement(textColors);
+		H.innerText = g('blinkingText');
 	}
 	blinkText(0);
 
