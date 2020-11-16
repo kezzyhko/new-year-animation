@@ -12,6 +12,8 @@ var widthPrecision = 10, heightPrecision = 3, sidePadding = 8, speedBase = 1.05;
 
 // settings
 
+	settingNamesToShare = ['wind', 'speed', 'snowhillHeight', 'fallingRate', 'meltingRate', 'snowSymbol'];
+
 	// presets
 	var settingPresets = {
 		'Snow': {
@@ -81,6 +83,20 @@ var widthPrecision = 10, heightPrecision = 3, sidePadding = 8, speedBase = 1.05;
 	}
 	s('volume', 0.1, false);
 
+	// load settings from query string
+	let settingsFromQuery;
+	try {
+		let query = document.location.search;
+		query = (query[0] == '?') ? query.replace('?', '') : query;
+		settingsFromQuery = JSON.parse(atob(query));
+	} catch {
+		settingsFromQuery = {};
+	}
+	window.history.replaceState({}, document.title, document.location.href.replace(document.location.search, ''));
+	for (const [name, value] of Object.entries(settingsFromQuery)) {
+		s(name, value);
+	}
+
 
 
 // other helper functions and variables
@@ -96,7 +112,7 @@ var treeSymbols = Object.getOwnPropertyNames(treeSymbolsColors);
 
 document.addEventListener("DOMContentLoaded", function() {
 
-	// helper variables
+	// get elements
 	var picture = document.getElementById('picture').innerText;
 	var snowBlock = document.getElementById('snow');
 	var treeBlock = document.getElementById('tree');
@@ -107,6 +123,9 @@ document.addEventListener("DOMContentLoaded", function() {
 	var muteButton = document.getElementById('mute-button');
 	var volumeChange = document.getElementById('volume-change');
 	var settingPresetsSelect = document.getElementById('setting-presets-select');
+	var shareLink = document.getElementById('share-link');
+	var shareLinkCopyButton = document.getElementById('share-link-copy-button');
+	var shareLinkIncludeSettings = document.getElementById('share-link-include-settings');
 
 	// handle settings inputs
 	for (let i = 0; i < settingInputs.length; i++) {
@@ -183,6 +202,29 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 			e.target.value = '';
 		});
+
+		// share section
+		shareLink.value = document.location.href;
+		shareLinkCopyButton.addEventListener('click', function(e) {
+			shareLink.focus();
+			shareLink.select();
+			document.execCommand('copy');
+		});
+		shareLink.addEventListener('blur', function(e) {
+			document.getSelection().removeAllRanges();
+		});
+		shareLinkIncludeSettings.addEventListener('change', function(e) {
+			shareLink.value = document.location.href;
+			if (e.target.checked) {
+				let settingsToShare = {};
+				for (const name of settingNamesToShare) {
+					settingsToShare[name] = g(name);
+				}
+				shareLink.value += '?';
+				shareLink.value += btoa(JSON.stringify(settingsToShare));
+			}
+		});
+
 
 
 	// change dots in the tree's star to current year

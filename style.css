@@ -2,7 +2,6 @@ body {
 	background-color: lightcyan;
 	font-size: 1.2rem;
 	text-align: center;
-	user-select: none;
 }
 #H {
 	color: orchid;
@@ -16,6 +15,18 @@ body {
 
 
 
+.sidebar-section {
+	text-align: left;
+	padding: 10px;
+	box-sizing: border-box;
+}
+.sidebar-section-header {
+	display: block;
+	font-size: 1.5em;
+}
+
+
+
 @font-face {
 	font-family: 'symbols';
 	src: url('symbols.woff') format('woff'), url('symbols.ttf') format('truetype');
@@ -25,6 +36,7 @@ body {
 	cursor: pointer;
 	color: darkblue;
 	vertical-align: middle;
+	user-select: none;
 }
 .icon:not(:focus-visible) {
 	outline: none;
@@ -83,6 +95,7 @@ body {
 	bottom: 0;
 	margin: 0;
 	z-index: -100;
+	user-select: none;
 }
 #tree {
 	font-weight: bold;
