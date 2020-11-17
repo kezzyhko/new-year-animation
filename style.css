@@ -12,11 +12,6 @@ body {
 #audio {
     display: none;
 }
-a {
-	color: darkblue;
-	font-weight: bold;
-	text-decoration: none;
-}
 
 
 
@@ -25,7 +20,12 @@ a {
 	width: 32px;
 	margin: 16px 8px 0;
 }
-#share img:not(:focus-visible) {
+a {
+	color: darkblue;
+	font-weight: bold;
+	text-decoration: none;
+}
+[tabindex]:not(:focus-visible) {
 	outline: none;
 }
 
