@@ -30,8 +30,17 @@ shareLinks = [
 
 // settings
 
+	var settingsToShare = {
+		'wind': 'number',
+		'speed': 'number',
+		'snowhillHeight': 'number',
+		'fallingRate': 'number',
+		'meltingRate': 'number',
+		'snowSymbol': 'string',
+		'blinkingText': 'string'
+	};
+
 	// localStorage management
-	var settingNamesToShare = ['wind', 'speed', 'snowhillHeight', 'fallingRate', 'meltingRate', 'snowSymbol', 'blinkingText'];
 	var settings = {}
 	function g(key) {
 		if (key in settings) {
@@ -103,21 +112,18 @@ shareLinks = [
 	}
 	s('volume', 0.2, false);
 
-	// load settings from query string
-	let settingsFromQuery;
-	try {
-		let query = document.location.search;
-		query = (query[0] == '?') ? query.replace('?', '') : query;
-		settingsFromQuery = JSON.parse(atob(query));
-		for (const name of settingNamesToShare) {
-			if (name in settingsFromQuery) {
-				s(name, settingsFromQuery[name]);
-			}
-		}
-	} catch (e) {
-		console.log(e);
-	}
+	// load settings from query params
 	let currentLink = new URL(document.location);
+	for (const name of Object.keys(settingsToShare)) {
+		console.log(currentLink.searchParams.has(name));
+		if (currentLink.searchParams.has(name)) {
+			let value = currentLink.searchParams.get(name);
+			if (settingsToShare[name] == 'number') {
+				value = parseFloat(value);
+			}
+			s(name, value);
+		}
+	}
 	currentLink.search = '';
 	window.history.replaceState({}, document.title, currentLink.toString());
 
@@ -247,11 +253,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 		shareLinkIncludeSettings.addEventListener('change', function(e) {
 			if (e.target.checked) {
-				let settingsToShare = {};
-				for (const name of settingNamesToShare) {
-					settingsToShare[name] = g(name);
+				for (const name of Object.keys(settingsToShare)) {
+					shareLink.searchParams.set(name, g(name));
 				}
-				shareLink.search = btoa(JSON.stringify(settingsToShare));
 			} else {
 				shareLink.search = '';
 			}
