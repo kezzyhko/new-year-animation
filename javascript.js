@@ -145,6 +145,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	var settingInputs = document.getElementsByClassName('setting');
 	var fullscreenButton = document.getElementById('fullscreen-button');
 	var audio = document.getElementById('audio');
+	var sidebarLabel = document.getElementById('sidebar-label');
 	var muteButton = document.getElementById('mute-button');
 	var volumeChange = document.getElementById('volume-change');
 	var settingPresetsSelect = document.getElementById('setting-presets-select');
@@ -165,29 +166,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 	// handle special buttons
+
 		function activateKeyPress(e) {
 			if (e.keyCode == 32 || e.keyCode == 13 || e.keyCode == 10) {
 				e.target.activateFunction(e);
 			}
 		}
 
-		// add social share buttons
-		function shareSocial(e) {
-			window.open(
-				e.target.hrefbase + encodeURIComponent(shareLinkInput.value),
-				'popUpWindow',
-				'height=400,width=600,left=10,top=10,,scrollbars=yes,menubar=no'
-			);
-		}
-		for (const shareLink of shareLinks) {
-			let img = document.createElement('img');
-			img.tabIndex = 0;
-			Object.assign(img, shareLink);
-			img.activateFunction = shareSocial;
-			img.addEventListener('keydown', activateKeyPress);
-			img.addEventListener('click', shareSocial);
-			share.append(img);
-		}
+		// fixing page that was intended for no js
+		audio.controls = false;
+		sidebarLabel.style.display = 'unset';
 
 		// fullscreen icon
 		function toggleFullscreen(e) {
@@ -269,6 +257,24 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 			shareLinkInput.value = shareLink.toString();
 		});
+
+		// add social share buttons
+		function shareSocial(e) {
+			window.open(
+				e.target.hrefbase + encodeURIComponent(shareLinkInput.value),
+				'popUpWindow',
+				'height=400,width=600,left=10,top=10,,scrollbars=yes,menubar=no'
+			);
+		}
+		for (const shareLink of shareLinks) {
+			let img = document.createElement('img');
+			img.tabIndex = 0;
+			Object.assign(img, shareLink);
+			img.activateFunction = shareSocial;
+			img.addEventListener('keydown', activateKeyPress);
+			img.addEventListener('click', shareSocial);
+			share.append(img);
+		}
 
 
 

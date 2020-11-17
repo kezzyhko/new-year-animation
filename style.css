@@ -29,9 +29,6 @@ body {
 	white-space: nowrap;
 	z-index: 100;
 }
-#audio {
-    display: none;
-}
 
 
 
@@ -106,6 +103,7 @@ a {
 	font-size: 50px;
 	line-height: 25px;
 	z-index: 1001;
+	display: none; /* will be shown via js if js is enabled */
 }
 #sidebar-first-row {
 	margin-left: 50px;

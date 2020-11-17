@@ -8,16 +8,6 @@
 		<script src="javascript.js"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description" content="New year falling snow animation with music">
-		<noscript>
-			<style>
-				#sidebar-label {
-					display: none;
-				}
-				#audio {
-					display: unset;
-				}
-			</style>
-		</noscript>
 	</head>
 	<body>
 		<h1 id="H">HAPPY NEW YEAR</h1>
@@ -35,7 +25,7 @@
 				Музыка: неизвестна. Если вы знаете что это за музыка - напишите мне.
 			</p>
 		</noscript>
-		<audio loop id="audio" controls>
+		<audio loop id="audio" controls tabindex="0">
 			<source src="music.ogg" type="audio/ogg">
 			<source src="music.mp3" type="audio/mpeg">
 		</audio><br>
