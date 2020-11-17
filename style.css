@@ -1,7 +1,27 @@
+/* General styles */
+
 body {
 	background-color: lightcyan;
 	font-size: 1.2rem;
 	text-align: center;
+}
+#tree, #snow {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0;
+	z-index: -100;
+	user-select: none;
+}
+#tree {
+	font-weight: bold;
+}
+#snow {
+	color: blue;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
 }
 #H {
 	color: orchid;
@@ -14,6 +34,8 @@ body {
 }
 
 
+
+/* Share */
 
 #share img {
 	cursor: pointer;
@@ -31,6 +53,8 @@ a {
 
 
 
+/* Sidebar sections */
+
 .sidebar-sections {
 	overflow: auto;
 	height: calc(100% - 30px);
@@ -46,6 +70,8 @@ a {
 }
 
 
+
+/* Sidebar first row icons */
 
 @font-face {
 	font-family: 'symbols';
@@ -77,6 +103,8 @@ a {
 
 
 
+/* Sidebar general logic */
+
 #sidebar {
 	position: fixed;
 	top: 0;
@@ -100,25 +128,4 @@ a {
 #sidebar-checkbox:checked ~ #sidebar, #sidebar:focus-within {
 	left: 0;
 	transition: left .5s;
-}
-
-
-
-#tree, #snow {
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	margin: 0;
-	z-index: -100;
-	user-select: none;
-}
-#tree {
-	font-weight: bold;
-}
-#snow {
-	color: blue;
-	overflow: hidden;
-	display: flex;
-	justify-content: center;
 }
