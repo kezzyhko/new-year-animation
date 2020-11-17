@@ -75,6 +75,36 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 									'Thanks for icons to <a href="https://fontello.com/">Fontello</a><br>' + 
 									'Music: unknown. If you know it - write to me and I will add it here.',
 		},
+		ru: {
+			'title':				"С НОВЫМ ГОДОМ",
+
+			'section-settings': 	"Настройки",
+			'settings-wind':		"Ветер:",
+			'settings-speed':		"Скорость:",
+			'settings-height':		"Высота сугробов:",
+			'settings-amount':		"Количество снега:",
+			'settings-melting':		"Скорость таяния:",
+			'settings-symbol':		"Символ снежинки:",
+			'settings-blinking':	"Мигающий текст:",
+
+			'presets-select':		"Наборы настроек",
+			'presets-snow':			"Снег",
+			'presets-blizzard':		"Метель",
+			'presets-rain-left':	"Дождь влево",
+			'presets-rain-right':	"Дождь вправо",
+			'presets-panic':		"Паника",
+			'presets-default':		"По-умолчанию (сбросить все настройки)",
+
+			'section-share':		"Поделиться",
+			'share-incl-settings':	"Включить текущие настройки",
+			'share-copy':			"Скопирывать",
+
+			'section-credits':		"Благодарности",
+			'credits-fulltext':		'Автор: <a href="https://vk.com/kezzyhko">kezzyhko</a><br>' + 
+									'Исходный код: <a href="https://github.com/kezzyhko/new-year-animation">GitHub</a><br>' + 
+									'Спасибо <a href="https://fontello.com/">Fontello</a> за иконки<br>' + 
+									'Если вы знаете название музыки - скажите мне и я добавлю его сюда',
+		},
 	};
 	var languages = Object.keys(translations);
 	var defaultLanguage = languages[0];
