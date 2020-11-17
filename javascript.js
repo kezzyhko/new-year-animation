@@ -68,6 +68,7 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 
 			'section-share':		"Share",
 			'share-incl-settings':	"Include current settings",
+			'share-incl-language':	"Include current language",
 			'share-copy':			"Copy",
 
 			'section-credits':		"Credits",
@@ -99,6 +100,7 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 
 			'section-share':		"Поделиться",
 			'share-incl-settings':	"Включить текущие настройки",
+			'share-incl-language':	"Включить текущий язык",
 			'share-copy':			"Скопирывать",
 
 			'section-credits':		"Благодарности",
@@ -258,6 +260,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	var shareLinkInput = document.getElementById('share-link-input');
 	var shareLinkCopyButton = document.getElementById('share-link-copy-button');
 	var shareLinkIncludeSettings = document.getElementById('share-link-include-settings');
+	var shareLinkIncludeLanguage = document.getElementById('share-link-include-language');
 
 	// handle settings inputs
 	for (let i = 0; i < settingInputs.length; i++) {
@@ -336,8 +339,9 @@ document.addEventListener("DOMContentLoaded", function() {
 			e.target.value = '';
 		});
 
-		// share section
-		shareLinkInput.value = document.location.href;
+		// share section - copy logic
+		shareLink.search = '';
+		shareLinkInput.value = shareLink.toString();
 		shareLinkCopyButton.addEventListener('click', function(e) {
 			shareLinkInput.focus();
 			shareLinkInput.select();
@@ -346,16 +350,25 @@ document.addEventListener("DOMContentLoaded", function() {
 		shareLinkInput.addEventListener('blur', function(e) {
 			document.getSelection().removeAllRanges();
 		});
-		shareLinkIncludeSettings.addEventListener('change', function(e) {
-			if (e.target.checked) {
+
+		// share section - checkboxes
+		function shareCheckboxChanged(e) {
+			if (shareLinkIncludeSettings.checked) {
 				for (const name of Object.keys(settingsToShare)) {
 					shareLink.searchParams.set(name, g(name));
 				}
 			} else {
 				shareLink.search = '';
 			}
+			if (shareLinkIncludeLanguage.checked) {
+				shareLink.searchParams.set('lang', currentLanguage);
+			} else {
+				shareLink.searchParams.delete('lang');
+			}
 			shareLinkInput.value = shareLink.toString();
-		});
+		}
+		shareLinkIncludeLanguage.addEventListener('change', shareCheckboxChanged);
+		shareLinkIncludeSettings.addEventListener('change', shareCheckboxChanged);
 
 		// add social share buttons
 		function shareSocial(e) {
@@ -379,6 +392,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		changeLanguage(currentLanguage);
 		function toggleLanguage(e) {
 			changeLanguage(languages[(currentLanguage == languages[0]) ? 1 : 0]);
+			shareCheckboxChanged();
 			currentLink.searchParams.set('lang', currentLanguage);
 			window.history.replaceState({}, document.title, currentLink.toString());
 		}
