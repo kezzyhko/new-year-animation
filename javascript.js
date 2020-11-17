@@ -46,6 +46,7 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 
 	var translations = {
 		en: {
+			'another-language':		"РУ",
 			'title': 				"HAPPY NEW YEAR",
 
 			'section-settings':		"Settings",
@@ -76,6 +77,7 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 									'Music: unknown. If you know it - write to me and I will add it here.',
 		},
 		ru: {
+			'another-language':		"EN",
 			'title':				"С НОВЫМ ГОДОМ",
 
 			'section-settings': 	"Настройки",
@@ -248,6 +250,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	var fullscreenButton = document.getElementById('fullscreen-button');
 	var audio = document.getElementById('audio');
 	var sidebarLabel = document.getElementById('sidebar-label');
+	var languageButton = document.getElementById('language-button');
 	var muteButton = document.getElementById('mute-button');
 	var volumeChange = document.getElementById('volume-change');
 	var settingPresetsSelect = document.getElementById('setting-presets-select');
@@ -274,10 +277,6 @@ document.addEventListener("DOMContentLoaded", function() {
 				e.target.activateFunction(e);
 			}
 		}
-
-		// fixing page that was intended for no js
-		audio.controls = false;
-		sidebarLabel.style.display = 'unset';
 
 		// fullscreen icon
 		function toggleFullscreen(e) {
@@ -376,12 +375,22 @@ document.addEventListener("DOMContentLoaded", function() {
 			share.append(img);
 		}
 
+		// language switcher
+		changeLanguage(currentLanguage);
+		function toggleLanguage(e) {
+			changeLanguage(languages[(currentLanguage == languages[0]) ? 1 : 0]);
+			currentLink.searchParams.set('lang', currentLanguage);
+			window.history.replaceState({}, document.title, currentLink.toString());
+		}
+		languageButton.activateFunction = toggleLanguage;
+		languageButton.addEventListener('keydown', activateKeyPress);
+		languageButton.addEventListener('click', toggleLanguage);
 
 
-	// apply the language
-	changeLanguage(currentLanguage);
 
-	// change dots in the tree's star to current year
+	// fixing page that was intended for no js
+	audio.controls = false;
+	sidebarLabel.style.display = 'unset';
 	picture = picture.replace('....', closestYear);
 
 	// make everything colorful

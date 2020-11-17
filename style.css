@@ -41,7 +41,7 @@ body {
 	margin: 0;
 	vertical-align: middle;
 }
-#settings input:not([size]) {
+#settings input:not([size]), input[type="range"] {
 	width: 130px;
 }
 
