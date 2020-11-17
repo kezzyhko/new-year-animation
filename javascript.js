@@ -282,6 +282,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 
 		// fullscreen icon
+		fullscreenButton.innerHTML = '&#59205;';
 		function toggleFullscreen(e) {
 			let promise;
 			if (document.fullscreen) {
@@ -298,6 +299,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		fullscreenButton.addEventListener('click', toggleFullscreen);
 
 		// mute icon
+		muteButton.innerHTML = '&#57356;';
 		function toggleMute(e) {
 			if (audio.paused) {
 				audio.play().then(e => {
