@@ -49,24 +49,24 @@
 				<input id="volume-change"     class="setting" name="volume" type="range" min="0" max="1" step="0.01">
 			</div>
 			<div class="sidebar-sections">
-				<div>
+				<div id="settings">
 					<span class="sidebar-section-header">Settings</span>
 					<select id="setting-presets-select">
 						<option disabled selected value="">Select preset</option>
 					</select><br>
-					Wind:<br>
+					<label for="wind-setting">Wind:</label>
 					<input name="wind"           type="range" min="-5" max="5"    step="1"     class="setting"><br>
-					Speed:<br>
+					<label for="speed-setting">Speed:</label>
 					<input name="speed"          type="range" min="1"  max="100"  step="1"     class="setting"><br>
-					Max snowdrift height:<br>
+					<label for="snowhillHeight-setting">Snowdrift height:</label>
 					<input name="snowhillHeight" type="range" min="1"  max="10"   step="1"     class="setting"><br>
-					Amount of snow:<br>
+					<label for="fallingRate-setting">Amount of snow:</label>
 					<input name="fallingRate"    type="range" min="0"  max="0.15" step="0.001" class="setting"><br>
-					Speed of melting:<br>
+					<label for="meltingRate-setting">Speed of melting:</label>
 					<input name="meltingRate"    type="range" min="0"  max="0.1"  step="0.001" class="setting"><br>
-					Snowflake symbol:<br>
-					<input name="snowSymbol"     type="text"  maxlength="1"                    class="setting"><br>
-					Blinking text:<br>
+					<label for="snowSymbol-setting">Snowflake symbol:</label>
+					<input name="snowSymbol"     type="text"  maxlength="1" size="1"           class="setting"><br>
+					<label for="blinkingText-setting">Blinking text:</label>
 					<input name="blinkingText"   type="text"                                   class="setting"><br>
 				</div>
 				<div>

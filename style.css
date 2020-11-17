@@ -35,6 +35,21 @@ body {
 
 
 
+/* Settings */
+
+#settings label {
+	vertical-align: middle;
+}
+#settings input {
+	margin: 0;
+	vertical-align: middle;
+}
+#settings input:not([size]) {
+	width: 130px;
+}
+
+
+
 /* Share */
 
 #share img {
