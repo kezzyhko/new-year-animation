@@ -117,7 +117,7 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 		var currentLanguage = defaultLanguage;
 		for (const lang_country of window.navigator.languages) {
 			let lang = lang_country.split('-')[0];
-			if (lang in languages) {
+			if (languages.includes(lang)) {
 				currentLanguage = lang;
 				break;
 			}
