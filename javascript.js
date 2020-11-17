@@ -28,6 +28,89 @@ shareLinks = [
 
 
 
+// other helper functions and variables
+
+function randomElement(arr) {
+	return arr[Math.floor(Math.random()*arr.length)];
+}
+
+var snow = null;
+var treeSymbols = Object.keys(treeSymbolsColors);
+var shareLink = new URL(document.location.protocol + '//' + document.location.host + document.location.pathname);
+var currentLink = new URL(document.location);
+var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0);
+
+
+
+// multiple languages
+
+	var translations = {
+		en: {
+			'title': 				"HAPPY NEW YEAR",
+
+			'section-settings':		"Settings",
+			'settings-wind':		"Wind:",
+			'settings-speed':		"Speed:",
+			'settings-height':		"Snowdrift height:",
+			'settings-amount':		"Amount of snow:",
+			'settings-melting':		"Speed of melting:",
+			'settings-symbol':		"Snowflake symbol:",
+			'settings-blinking':	"Blinking text:",
+
+			'presets-select':		"Settings presets",
+			'presets-snow':			"Snow",
+			'presets-blizzard':		"Blizzard",
+			'presets-rain-left':	"Rain to the left",
+			'presets-rain-right':	"Rain to the right",
+			'presets-panic':		"Panic",
+			'presets-default':		"Default (clear all settings)",
+
+			'section-share':		"Share",
+			'share-incl-settings':	"Include current settings",
+			'share-copy':			"Copy",
+
+			'section-credits':		"Credits",
+			'credits-fulltext':		'Made by <a href="https://vk.com/kezzyhko">kezzyhko</a><br>' + 
+									'Sources are on <a href="https://github.com/kezzyhko/new-year-animation">GitHub</a><br>' + 
+									'Thanks for icons to <a href="https://fontello.com/">Fontello</a><br>' + 
+									'Music: unknown. If you know it - write to me and I will add it here.',
+		},
+	};
+	var languages = Object.keys(translations);
+	var defaultLanguage = languages[0];
+
+	// detect current language 
+	var currentLanguage = currentLink.searchParams.get('lang');
+	if (!languages.includes(currentLanguage)) {
+		var currentLanguage = defaultLanguage;
+		for (const lang_country of window.navigator.languages) {
+			let lang = lang_country.split('-')[0];
+			if (lang in languages) {
+				currentLanguage = lang;
+				break;
+			}
+		}
+	}
+	currentLink.searchParams.set('lang', currentLanguage);
+	window.history.replaceState({}, document.title, currentLink.toString());
+
+	// apply the language function
+	function changeLanguage(newLang) {
+		currentLanguage = newLang;
+		let fieldsToChange = document.querySelectorAll('[data-translation-key]');
+		for (const element of fieldsToChange) {
+			let translation = translations[currentLanguage][element.dataset.translationKey];
+			if (!translation) {
+				translation = translations[defaultLanguage][element.dataset.translationKey]
+			}
+			if (translation) {
+				element.innerHTML = translation;
+			}
+		}
+	}
+
+
+
 // settings
 
 	var settingsToShare = {
@@ -64,7 +147,7 @@ shareLinks = [
 
 	// presets
 	var settingPresets = {
-		'Snow': {
+		'presets-snow': {
 			wind: -1,
 			speed: 37,
 			snowhillHeight: 3,
@@ -72,7 +155,7 @@ shareLinks = [
 			meltingRate: 15/1000,
 			snowSymbol: '*',
 		},
-		'Blizzard': {
+		'presets-blizzard': {
 			wind: 5,
 			speed: 70,
 			snowhillHeight: 10,
@@ -80,7 +163,7 @@ shareLinks = [
 			meltingRate: 0.005,
 			snowSymbol: '*',
 		},
-		'Rain to the left': {
+		'presets-rain-left': {
 			wind: -1,
 			speed: 80,
 			snowhillHeight: 1,
@@ -89,33 +172,29 @@ shareLinks = [
 			snowSymbol: '/',
 		},
 	};
-	settingPresets['Rain to the right'] = Object.assign({}, settingPresets['Rain to the left']); 
-	settingPresets['Rain to the right'].wind = 1;
-	settingPresets['Rain to the right'].snowSymbol = '\\';
-	Object.assign(settingPresets, {
-		'Panic': {
-			wind: 0,
-			speed: 55,
-			snowhillHeight: 10,
-			fallingRate: 0.03,
-			meltingRate: 0.006,
-			snowSymbol: 'A',
-		},
-	});
-	var defaultPresetName = 'Default (clear all settings)';
-	settingPresets[defaultPresetName] = Object.assign({}, settingPresets['Snow']);
-	settingPresets[defaultPresetName].blinkingText = 'HAPPY NEW YEAR';
+	settingPresets['presets-rain-right'] = Object.assign({}, settingPresets['presets-rain-left']); 
+	settingPresets['presets-rain-right'].wind = 1;
+	settingPresets['presets-rain-right'].snowSymbol = '\\';
+	settingPresets['presets-panic'] = {
+		wind: 0,
+		speed: 55,
+		snowhillHeight: 10,
+		fallingRate: 0.03,
+		meltingRate: 0.006,
+		snowSymbol: 'A',
+	};
+	settingPresets['presets-default'] = Object.assign({}, settingPresets['presets-snow']);
+	settingPresets['presets-default'].blinkingText = closestYear;
 
 	// default settings
-	for (const [name, value] of Object.entries(settingPresets[defaultPresetName])) {
+	for (const [name, value] of Object.entries(settingPresets['presets-default'])) {
 		s(name, value, false);
 	}
 	s('volume', 0.2, false);
 
 	// load settings from query params
-	let currentLink = new URL(document.location);
 	for (const name of Object.keys(settingsToShare)) {
-		console.log(currentLink.searchParams.has(name));
+		currentLink.searchParams.delete(name);
 		if (currentLink.searchParams.has(name)) {
 			let value = currentLink.searchParams.get(name);
 			if (settingsToShare[name] == 'number') {
@@ -124,20 +203,7 @@ shareLinks = [
 			s(name, value);
 		}
 	}
-	currentLink.search = '';
 	window.history.replaceState({}, document.title, currentLink.toString());
-
-
-
-// other helper functions and variables
-
-function randomElement(arr) {
-	return arr[Math.floor(Math.random()*arr.length)];
-}
-
-var snow = null;
-var treeSymbols = Object.getOwnPropertyNames(treeSymbolsColors);
-var shareLink = new URL(document.location.protocol + '//' + document.location.host + document.location.pathname);
 
 
 
@@ -229,7 +295,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		// setting presets select
 		for (const presetName of Object.keys(settingPresets)) {
 			let option = document.createElement('option');
-			option.innerText = option.value = presetName;
+			option.dataset.translationKey = option.value = presetName;
 			settingPresetsSelect.append(option);
 		}
 		settingPresetsSelect.addEventListener('change', function(e) {
@@ -282,9 +348,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
+	// apply the language
+	changeLanguage(currentLanguage);
+
 	// change dots in the tree's star to current year
-	let now = new Date();
-	picture = picture.replace('....', now.getFullYear() + (now.getMonth() >= 6 ? 1 : 0));
+	picture = picture.replace('....', closestYear);
 
 	// make everything colorful
 	treeBlock.innerHTML = '';

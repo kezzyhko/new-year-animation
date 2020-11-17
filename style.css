@@ -121,8 +121,8 @@ a {
 #sidebar {
 	position: fixed;
 	top: 0;
-	width: 300px;
-	left: -300px;
+	width: 310px;
+	left: -310px;
 	transition: left .5s;
 	height: 100%;
 	background: rgba(0, 0, 0, 0.1);
