@@ -105,9 +105,9 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 
 			'section-credits':		"Благодарности",
 			'credits-fulltext':		'Автор: <a href="https://vk.com/kezzyhko">kezzyhko</a><br>' + 
-									'Исходный код: <a href="https://github.com/kezzyhko/new-year-animation">GitHub</a><br>' + 
+									'Исходный код на <a href="https://github.com/kezzyhko/new-year-animation">GitHub</a>\'е<br>' + 
 									'Спасибо <a href="https://fontello.com/">Fontello</a> за иконки<br>' + 
-									'Если вы знаете название музыки - скажите мне и я добавлю его сюда',
+									'Если вы знаете название музыки - скажите мне и я добавлю его сюда.',
 		},
 	};
 	var languages = Object.keys(translations);
