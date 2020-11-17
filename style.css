@@ -75,6 +75,8 @@ a {
 	text-align: left;
 	padding: 10px;
 	box-sizing: border-box;
+	float: left;
+	max-width: 310px;
 }
 .sidebar-section-header {
 	display: block;

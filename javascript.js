@@ -96,7 +96,7 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 			'presets-rain-left':	"Дождь влево",
 			'presets-rain-right':	"Дождь вправо",
 			'presets-panic':		"Паника",
-			'presets-default':		"По-умолчанию (сбросить все настройки)",
+			'presets-default':		"По-умолчанию (сбросить настройки)",
 
 			'section-share':		"Поделиться",
 			'share-incl-settings':	"Включить текущие настройки",
