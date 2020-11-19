@@ -216,9 +216,10 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 		fallingRate: 0.03,
 		meltingRate: 0.006,
 		snowSymbol: 'A',
+		blinkingText: 'A'.repeat(40),
 	};
 	settingPresets['presets-default'] = Object.assign({}, settingPresets['presets-snow']);
-	settingPresets['presets-default'].blinkingText = closestYear;
+	settingPresets['presets-default'].blinkingText = '....';
 
 	// default settings
 	for (const [name, value] of Object.entries(settingPresets['presets-default'])) {
@@ -449,7 +450,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		if (delay < 300) delay = 1000;
 		setTimeout(blinkText, delay, delay/1.1);
 		H.style.color = randomElement(textColors);
-		H.innerText = g('blinkingText');
+		H.innerText = g('blinkingText').replace('....', closestYear);
 	}
 	blinkText(0);
 
