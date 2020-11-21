@@ -229,7 +229,6 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 
 	// load settings from query params
 	for (const name of Object.keys(settingsToShare)) {
-		currentLink.searchParams.delete(name);
 		if (currentLink.searchParams.has(name)) {
 			let value = currentLink.searchParams.get(name);
 			if (settingsToShare[name] == 'number') {
@@ -237,6 +236,7 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 			}
 			s(name, value);
 		}
+		currentLink.searchParams.delete(name);
 	}
 	window.history.replaceState({}, document.title, currentLink.toString());
 
