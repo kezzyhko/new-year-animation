@@ -6,7 +6,7 @@ textColors = Array.from(ballColors);
 var treeSymbolsColors = {'M': 'green', '|': 'saddlebrown'};
 starColor = 'red';
 
-var widthPrecision = 10, heightPrecision = 3, sidePadding = 8, speedBase = 1.05;
+var widthPrecision = 10, heightPrecision = 3, sidePadding = 8, minWidth = 10, minHeight = 10, speedBase = 1.05;
 
 shareLinks = [
 	{
@@ -502,9 +502,10 @@ document.addEventListener("DOMContentLoaded", function() {
 		pre.style.position = 'absolute';
 		document.body.append(pre);
 		pre.innerText += ' '.repeat(widthPrecision);
-		width = Math.ceil(window.innerWidth/pre.clientWidth*widthPrecision) + 2*sidePadding;
+		width = Math.max(Math.ceil(window.innerWidth/pre.clientWidth*widthPrecision) || 0, minWidth);
+		width += 2*sidePadding;
 		pre.innerHTML += ' <br>'.repeat(heightPrecision);
-		height = Math.ceil(window.innerHeight/pre.clientHeight*heightPrecision);
+		height = Math.max(Math.ceil(window.innerHeight/pre.clientHeight*heightPrecision) || 0, minHeight);
 		pre.remove();
 		
 		// init empty space for snow
