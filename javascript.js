@@ -6,7 +6,7 @@ textColors = Array.from(ballColors);
 var treeSymbolsColors = {'M': 'green', '|': 'saddlebrown'};
 starColor = 'red';
 
-var widthPrecision = 10, heightPrecision = 3, sidePadding = 8, minWidth = 10, minHeight = 10, speedBase = 1.05;
+var widthPrecision = 10, heightPrecision = 3, sidePadding = 8, minWidth = 10, minHeight = 10, speedBase = 1.05, defaultVolume = 0.2;
 
 shareLinks = [
 	{
@@ -225,7 +225,7 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 	for (const [name, value] of Object.entries(settingPresets['presets-default'])) {
 		s(name, value, false);
 	}
-	s('volume', 0.2, false);
+	s('volume', defaultVolume, false);
 
 	// load settings from query params
 	for (const name of Object.keys(settingsToShare)) {
@@ -281,6 +281,9 @@ document.addEventListener("DOMContentLoaded", function() {
 				e.target.activateFunction(e);
 			}
 		}
+		function audioStopped() {
+			return (audio.paused || audio.muted || audio.volume == 0);
+		}
 
 		// fullscreen icon
 		function changeFullscreenIcon() {
@@ -306,7 +309,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		// mute icon
 		function changeMuteIcon() {
-			muteButton.innerHTML = (audio.paused || audio.muted || audio.volume == 0) ? '&#57356;' : '&#57395;';	
+			muteButton.innerHTML = audioStopped() ? '&#57356;' : '&#57395;';	
 		}
 		audio.addEventListener('play', changeMuteIcon);
 		audio.addEventListener('pause', changeMuteIcon);
@@ -315,12 +318,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		// mute button
 		function toggleMute(e) {
-			if (audio.paused) {
+			if (audioStopped()) {
 				audio.play().then(changeMuteIcon).catch(console.log);
+				audio.muted = false;
+				if (g('volume') == 0) {
+					s('volume', defaultVolume);
+					audio.volume = defaultVolume;
+					document.getElementById('volume-setting').value = defaultVolume;
+				}
 			} else {
 				audio.pause();
-				changeMuteIcon();
 			}
+			changeMuteIcon();
 		}
 		muteButton.activateFunction = toggleMute;
 		muteButton.addEventListener('keydown', activateKeyPress);
@@ -330,8 +339,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		volumeChange.addEventListener('input', function(e) {
 			audio.volume = e.target.value;
 			s('volume', e.target.value);
-			if (audio.paused) {
+			if (audioStopped()) {
 				audio.play().then(changeMuteIcon).catch(console.log);
+				audio.muted = false;
 			}
 		});
 		audio.volume = g('volume');
