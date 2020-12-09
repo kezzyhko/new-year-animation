@@ -283,7 +283,14 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 
 		// fullscreen icon
-		fullscreenButton.innerHTML = '&#59205;';
+		function changeFullscreenIcon() {
+			fullscreenButton.innerHTML = document.fullscreen ? '&#59207;' : '&#59205;';	
+		}
+		document.addEventListener('fullscreenchange', changeFullscreenIcon);
+		document.addEventListener('resize', changeFullscreenIcon);
+		changeFullscreenIcon();
+	
+		// fullscreen button
 		function toggleFullscreen(e) {
 			let promise;
 			if (document.fullscreen) {
@@ -291,24 +298,28 @@ document.addEventListener("DOMContentLoaded", function() {
 			} else {
 				promise = document.documentElement.requestFullscreen();
 			}
-			promise.then(e => {
-				fullscreenButton.innerHTML = document.fullscreen ? '&#59207;' : '&#59205;';
-			}).catch(console.log);
+			promise.then(changeFullscreenIcon).catch(console.log);
 		}
 		fullscreenButton.activateFunction = toggleFullscreen;
 		fullscreenButton.addEventListener('keydown', activateKeyPress);
 		fullscreenButton.addEventListener('click', toggleFullscreen);
 
 		// mute icon
-		muteButton.innerHTML = '&#57356;';
+		function changeMuteIcon() {
+			muteButton.innerHTML = (audio.paused || audio.muted || audio.volume == 0) ? '&#57356;' : '&#57395;';	
+		}
+		audio.addEventListener('play', changeMuteIcon);
+		audio.addEventListener('pause', changeMuteIcon);
+		audio.addEventListener('volumechange', changeMuteIcon);
+		changeMuteIcon();
+
+		// mute button
 		function toggleMute(e) {
 			if (audio.paused) {
-				audio.play().then(e => {
-					muteButton.innerHTML = '&#57395;';
-				}).catch(console.log);
+				audio.play().then(changeMuteIcon).catch(console.log);
 			} else {
 				audio.pause();
-				muteButton.innerHTML = '&#57356;';
+				changeMuteIcon();
 			}
 		}
 		muteButton.activateFunction = toggleMute;
@@ -317,13 +328,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		// volume change slider
 		volumeChange.addEventListener('input', function(e) {
-			if (audio.paused) {
-				audio.play().then(e => {
-					muteButton.innerHTML = '&#57395;';
-				}).catch(console.log);
-			}
 			audio.volume = e.target.value;
 			s('volume', e.target.value);
+			if (audio.paused) {
+				audio.play().then(changeMuteIcon).catch(console.log);
+			}
 		});
 		audio.volume = g('volume');
 
