@@ -270,6 +270,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		input.id = input.name + "-setting";
 		input.addEventListener('input', function(e) {
 			s(e.target.name, (e.target.type === 'range') ? parseFloat(e.target.value) : e.target.value);
+			updateSharingLink();
 		});
 	}
 
@@ -374,7 +375,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 
 		// share section - checkboxes
-		function shareCheckboxChanged(e) {
+		function updateSharingLink(e) {
 			if (shareLinkIncludeSettings.checked) {
 				for (const name of Object.keys(settingsToShare)) {
 					shareLink.searchParams.set(name, g(name));
@@ -389,8 +390,8 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 			shareLinkInput.value = shareLink.toString();
 		}
-		shareLinkIncludeLanguage.addEventListener('change', shareCheckboxChanged);
-		shareLinkIncludeSettings.addEventListener('change', shareCheckboxChanged);
+		shareLinkIncludeLanguage.addEventListener('change', updateSharingLink);
+		shareLinkIncludeSettings.addEventListener('change', updateSharingLink);
 
 		// add social share buttons
 		function shareSocial(e) {
@@ -414,7 +415,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		changeLanguage(currentLanguage);
 		function toggleLanguage(e) {
 			changeLanguage(languages[(currentLanguage == languages[0]) ? 1 : 0]);
-			shareCheckboxChanged();
+			updateSharingLink();
 			currentLink.searchParams.set('lang', currentLanguage);
 			window.history.replaceState({}, document.title, currentLink.toString());
 		}
