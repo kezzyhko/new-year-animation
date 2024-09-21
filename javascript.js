@@ -64,6 +64,8 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 			'presets-rain-left':	"Rain to the left",
 			'presets-rain-right':	"Rain to the right",
 			'presets-panic':		"Panic",
+			'presets-what':			"What",
+			'presets-empty':		"Empty",
 			'presets-default':		"Default (clear all settings)",
 
 			'section-share':		"Share",
@@ -96,6 +98,8 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 			'presets-rain-left':	"Дождь влево",
 			'presets-rain-right':	"Дождь вправо",
 			'presets-panic':		"Паника",
+			'presets-what':			"Что",
+			'presets-empty':		"Пустой",
 			'presets-default':		"По-умолчанию (сбросить настройки)",
 
 			'section-share':		"Поделиться",
@@ -217,6 +221,24 @@ var closestYear = new Date().getFullYear() + (new Date().getMonth() >= 6 ? 1 : 0
 		meltingRate: 0.006,
 		snowSymbol: 'A',
 		blinkingText: 'A'.repeat(40),
+	};
+	settingPresets['presets-what'] = {
+		wind: 0,
+		speed: 8,
+		snowhillHeight: 10,
+		fallingRate: 0.15,
+		meltingRate: 0,
+		snowSymbol: '?',
+		blinkingText: '?'.repeat(40),
+	};
+	settingPresets['presets-empty'] = {
+		wind: 0,
+		speed: 1,
+		snowhillHeight: 1,
+		fallingRate: 0,
+		meltingRate: 0.1,
+		snowSymbol: '',
+		blinkingText: '',
 	};
 	settingPresets['presets-default'] = Object.assign({}, settingPresets['presets-snow']);
 	settingPresets['presets-default'].blinkingText = '....';
