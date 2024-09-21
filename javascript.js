@@ -382,6 +382,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				document.getElementById(name+"-setting").value = value;
 			}
 			e.target.value = '';
+			updateSharingLink();
 		});
 
 		// share section - copy logic
